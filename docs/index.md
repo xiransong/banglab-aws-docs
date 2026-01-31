@@ -11,12 +11,6 @@ It is a **lab-specific guide** describing:
 
 ---
 
-## v0.1.0
-- Initial internal release
-- EC2 & S3 basics
-
----
-
 ## 🎯 Who This Guide Is For
 
 This documentation is intended for:
