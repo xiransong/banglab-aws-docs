@@ -18,9 +18,10 @@ to monitor and verify state.
 
 Make sure you have:
 
-- logged in to the AWS access portal  
-  https://banglab-udem-mila.awsapps.com/start  
-  selected your account, and chosen **EC2-GPU-Operator** to open the AWS console
+- logged in to the AWS access portal: 
+  [https://banglab-udem-mila.awsapps.com/start](https://banglab-udem-mila.awsapps.com/start)
+
+- selected your account, and chosen **EC2-GPU-Operator** to open the AWS console
 
 - authenticated in your terminal using SSO:
 
@@ -95,9 +96,9 @@ In the AWS console:
 * Search for “Ubuntu 22.04”
 * Prefer images:
 
-  * owned by **Canonical**
-  * marked as **64-bit (x86)**
-  * with recent creation dates
+    * owned by **Canonical**
+    * marked as **64-bit (x86)**
+    * with recent creation dates
 
 The CLI method above simply automates this selection.
 
@@ -138,7 +139,7 @@ aws ec2 authorize-security-group-ingress \
 
 * EC2 → **Security Groups**
 
-  * Check inbound rule: TCP 22 from your IP
+    * Check inbound rule: TCP 22 from your IP
 
 ---
 
@@ -151,8 +152,8 @@ We use `t3.small` as an example:
 * requires **2 vCPUs**
 * suitable for lightweight testing
 
-> If your account still has **0 vCPU quota**, this step will fail.
-> Request a quota increase before continuing.
+If your account still has **0 vCPU quota**, this step will fail.
+Request a quota increase before continuing.
 
 Launch the instance:
 
@@ -180,18 +181,18 @@ aws ec2 run-instances \
 
 * **EBS (your disk) configuration**
 
-  * Sets a 30 GB root volume
-  * Data is deleted automatically when the instance is terminated
+    * Sets a 30 GB root volume
+    * Data is deleted automatically when the instance is terminated
 
 * **Tags**
 
-  * `Value=cpu-test` helps identify the instance in the console
-  * Tags are labels for organization and cost visibility
+    * `Value=cpu-test` helps identify the instance in the console
+    * Tags are labels for organization and cost visibility
 
 * **CLI output**
 
-  * The command returns a large JSON response
-  * Press `q` to exit the pager
+    * The command returns a large JSON response
+    * Press `q` to exit the pager
 
 ### Monitor in Browser
 
@@ -199,10 +200,10 @@ aws ec2 run-instances \
 * Watch state change: `pending` → `running`
 * Check:
 
-  * Instance type
-  * **Instance ID**
-  * **Public IPv4 address**
-  * Tags
+    * Instance type
+    * **Instance ID**
+    * **Public IPv4 address**
+    * Tags
 
 You will need instance ID and public IPv4 address. 
 
