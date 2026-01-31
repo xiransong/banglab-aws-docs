@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>CPU Instance Lifecycle - BangLab AWS EC2 Guide</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "CPU Instance Lifecycle";
+        var mkdocs_page_input_path = "ec2/cpu-instance-lifecycle.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Concepts</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/accounts-and-access/">Accounts and Access</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/organization-and-billing/">Organization and Billing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/ec2-basics/">EC2 Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/s3-basics/">S3 Basics</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Access & Capabilities</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Onboarding</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-access-portal/">AWS Access Portal Login</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-cli-setup/">AWS CLI Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/vcpu-quota/">vCPU Quota</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">EC2</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">CPU Instance Lifecycle</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#before-you-start">Before You Start</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-0-create-a-key-pair-one-time-setup">Phase 0 — Create a Key Pair (One-Time Setup)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser">Monitor in Browser</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-1-choose-an-ami-ubuntu-2204">Phase 1 — Choose an AMI (Ubuntu 22.04)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#using-the-cli">Using the CLI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-the-browser">Using the Browser</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-2-configure-security-group-ssh-access">Phase 2 — Configure Security Group (SSH Access)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser_1">Monitor in Browser</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-3-launch-a-cpu-ec2-instance">Phase 3 — Launch a CPU EC2 Instance</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser_2">Monitor in Browser</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-4-ssh-into-the-instance">Phase 4 — SSH into the Instance</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-5-stop-start-and-terminate">Phase 5 — Stop, Start, and Terminate</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#stop-the-instance">Stop the Instance</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#start-the-instance-again">Start the Instance Again</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#terminate-the-instance-final">Terminate the Instance (Final)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser_3">Monitor in Browser</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ebs-basics/">EBS Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../gpu-instances/">GPU Instances</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">S3</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/workflow/">S3 Workflow</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">BangLab AWS EC2 Guide</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">EC2</li>
+      <li class="breadcrumb-item active">CPU Instance Lifecycle</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cpu-instance-lifecycle">CPU Instance Lifecycle</h1>
+<p>This tutorial walks through the <strong>complete lifecycle of a CPU EC2 instance</strong>,
+from creation to termination.</p>
+<p>We use a <strong>CPU instance</strong> as the first example because:</p>
+<ul>
+<li>it is cheaper,</li>
+<li>it behaves the same way as GPU instances,</li>
+<li>and it lets you learn the EC2 workflow safely.</li>
+</ul>
+<p>We primarily use the <strong>AWS CLI</strong> to execute actions, and the <strong>AWS console</strong>
+to monitor and verify state.</p>
+<hr />
+<h2 id="before-you-start">Before You Start</h2>
+<p>Make sure you have:</p>
+<ul>
+<li>
+<p>logged in to the AWS access portal<br />
+  https://banglab-udem-mila.awsapps.com/start<br />
+  selected your account, and chosen <strong>EC2-GPU-Operator</strong> to open the AWS console</p>
+</li>
+<li>
+<p>authenticated in your terminal using SSO:</p>
+</li>
+</ul>
+<pre><code class="language-bash">aws sso login --profile &lt;your-profile-name&gt;
+</code></pre>
+<hr />
+<h2 id="phase-0-create-a-key-pair-one-time-setup">Phase 0 — Create a Key Pair (One-Time Setup)</h2>
+<p>An EC2 key pair is used for <strong>SSH access from your device</strong>.</p>
+<p>We recommend creating an SSH key locally and uploading <strong>only the public key</strong>
+to AWS.</p>
+<p>Generate a key pair:</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -f ~/.ssh/banglab
+</code></pre>
+<p>Upload the public key to AWS:</p>
+<pre><code class="language-bash">aws ec2 import-key-pair \
+  --region us-east-1 \
+  --key-name banglab-key \
+  --public-key-material fileb://~/.ssh/banglab.pub
+</code></pre>
+<p>You will reuse this key pair for future instances.</p>
+<h3 id="monitor-in-browser">Monitor in Browser</h3>
+<ul>
+<li>
+<p>EC2 → <strong>Key Pairs</strong></p>
+</li>
+<li>
+<p>Confirm <code>banglab-key</code> appears in the list</p>
+</li>
+</ul>
+<hr />
+<h2 id="phase-1-choose-an-ami-ubuntu-2204">Phase 1 — Choose an AMI (Ubuntu 22.04)</h2>
+<p>An <strong>AMI (Amazon Machine Image)</strong> defines the operating system of the instance.</p>
+<p>We use <strong>Ubuntu 22.04 LTS</strong> as an example.</p>
+<h3 id="using-the-cli">Using the CLI</h3>
+<p>Find the latest Ubuntu 22.04 AMI:</p>
+<pre><code class="language-bash">aws ec2 describe-images \
+  --region us-east-1 \
+  --owners 099720109477 \
+  --filters &quot;Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*&quot; \
+  --query 'Images | sort_by(@, &amp;CreationDate)[-1].ImageId' \
+  --output text
+</code></pre>
+<p>Save the returned AMI ID (e.g. as an environment variable):</p>
+<pre><code class="language-bash">AMI_ID=ami-xxxxxxxx
+</code></pre>
+<h3 id="using-the-browser">Using the Browser</h3>
+<p>In the AWS console:</p>
+<ul>
+<li>Go to <strong>EC2 → AMIs</strong></li>
+<li>Search for “Ubuntu 22.04”</li>
+<li>
+<p>Prefer images:</p>
+</li>
+<li>
+<p>owned by <strong>Canonical</strong></p>
+</li>
+<li>marked as <strong>64-bit (x86)</strong></li>
+<li>with recent creation dates</li>
+</ul>
+<p>The CLI method above simply automates this selection.</p>
+<hr />
+<h2 id="phase-2-configure-security-group-ssh-access">Phase 2 — Configure Security Group (SSH Access)</h2>
+<p>A <strong>security group</strong> acts as a virtual firewall.</p>
+<p>We will allow:</p>
+<ul>
+<li>SSH (port 22)</li>
+<li><strong>only from your current public IP</strong></li>
+</ul>
+<p>Create a security group:</p>
+<pre><code class="language-bash">aws ec2 create-security-group \
+  --region us-east-1 \
+  --group-name banglab-ssh \
+  --description &quot;SSH access from my IP&quot;
+</code></pre>
+<p>Allow SSH from your IP:</p>
+<pre><code class="language-bash">MY_IP=$(curl -s https://checkip.amazonaws.com)
+
+aws ec2 authorize-security-group-ingress \
+  --region us-east-1 \
+  --group-name banglab-ssh \
+  --protocol tcp \
+  --port 22 \
+  --cidr ${MY_IP}/32
+</code></pre>
+<h3 id="monitor-in-browser_1">Monitor in Browser</h3>
+<ul>
+<li>
+<p>EC2 → <strong>Security Groups</strong></p>
+</li>
+<li>
+<p>Check inbound rule: TCP 22 from your IP</p>
+</li>
+</ul>
+<hr />
+<h2 id="phase-3-launch-a-cpu-ec2-instance">Phase 3 — Launch a CPU EC2 Instance</h2>
+<p>Now we launch the instance.</p>
+<p>We use <code>t3.small</code> as an example:</p>
+<ul>
+<li>requires <strong>2 vCPUs</strong></li>
+<li>suitable for lightweight testing</li>
+</ul>
+<blockquote>
+<p>If your account still has <strong>0 vCPU quota</strong>, this step will fail.
+Request a quota increase before continuing.</p>
+</blockquote>
+<p>Launch the instance:</p>
+<pre><code class="language-bash">aws ec2 run-instances \
+  --region us-east-1 \
+  --image-id ${AMI_ID} \
+  --instance-type t3.small \
+  --key-name banglab-key \
+  --security-groups banglab-ssh \
+  --block-device-mappings '[
+    {
+      &quot;DeviceName&quot;: &quot;/dev/sda1&quot;,
+      &quot;Ebs&quot;: {
+        &quot;VolumeSize&quot;: 30,
+        &quot;VolumeType&quot;: &quot;gp3&quot;,
+        &quot;DeleteOnTermination&quot;: true
+      }
+    }
+  ]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=cpu-test}]'
+</code></pre>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>
+<p><strong>EBS (your disk) configuration</strong></p>
+</li>
+<li>
+<p>Sets a 30 GB root volume</p>
+</li>
+<li>
+<p>Data is deleted automatically when the instance is terminated</p>
+</li>
+<li>
+<p><strong>Tags</strong></p>
+</li>
+<li>
+<p><code>Value=cpu-test</code> helps identify the instance in the console</p>
+</li>
+<li>
+<p>Tags are labels for organization and cost visibility</p>
+</li>
+<li>
+<p><strong>CLI output</strong></p>
+</li>
+<li>
+<p>The command returns a large JSON response</p>
+</li>
+<li>Press <code>q</code> to exit the pager</li>
+</ul>
+<h3 id="monitor-in-browser_2">Monitor in Browser</h3>
+<ul>
+<li>EC2 → <strong>Instances</strong></li>
+<li>Watch state change: <code>pending</code> → <code>running</code></li>
+<li>
+<p>Check:</p>
+</li>
+<li>
+<p>Instance type</p>
+</li>
+<li><strong>Instance ID</strong></li>
+<li><strong>Public IPv4 address</strong></li>
+<li>Tags</li>
+</ul>
+<p>You will need instance ID and public IPv4 address. </p>
+<hr />
+<h2 id="phase-4-ssh-into-the-instance">Phase 4 — SSH into the Instance</h2>
+<p>Once the instance is <code>running</code>, connect via SSH:</p>
+<pre><code class="language-bash">ssh -i ~/.ssh/banglab ubuntu@&lt;PUBLIC_IP&gt;
+</code></pre>
+<p>Run a sanity check:</p>
+<pre><code class="language-bash">uname -a
+</code></pre>
+<p>If this works, the instance is ready for use.</p>
+<hr />
+<h2 id="phase-5-stop-start-and-terminate">Phase 5 — Stop, Start, and Terminate</h2>
+<p>Return to your <strong>local machine</strong> for lifecycle commands.</p>
+<h3 id="stop-the-instance">Stop the Instance</h3>
+<pre><code class="language-bash">aws ec2 stop-instances \
+  --region us-east-1 \
+  --instance-ids &lt;INSTANCE_ID&gt;
+</code></pre>
+<ul>
+<li>Instance is powered off</li>
+<li>Storage (EBS) is preserved</li>
+<li>Billing <strong>largely</strong> stops</li>
+</ul>
+<hr />
+<h3 id="start-the-instance-again">Start the Instance Again</h3>
+<pre><code class="language-bash">aws ec2 start-instances \
+  --region us-east-1 \
+  --instance-ids &lt;INSTANCE_ID&gt;
+</code></pre>
+<ul>
+<li>Instance resumes</li>
+<li>Public IP <strong>may change</strong></li>
+</ul>
+<hr />
+<h3 id="terminate-the-instance-final">Terminate the Instance (Final)</h3>
+<pre><code class="language-bash">aws ec2 terminate-instances \
+  --region us-east-1 \
+  --instance-ids &lt;INSTANCE_ID&gt;
+</code></pre>
+<ul>
+<li>Instance is permanently deleted</li>
+<li>Root disk data is lost</li>
+<li>This action <strong>cannot be undone</strong></li>
+</ul>
+<h3 id="monitor-in-browser_3">Monitor in Browser</h3>
+<ul>
+<li>EC2 → <strong>Instances</strong></li>
+<li>
+<p>Observe state transitions:</p>
+</li>
+<li>
+<p><code>running</code> → <code>shutting-down</code> → <code>terminated</code></p>
+</li>
+</ul>
+<hr />
+<h2 id="summary">Summary</h2>
+<p>In this tutorial, you learned how to:</p>
+<ul>
+<li>create and upload an SSH key pair,</li>
+<li>choose an Ubuntu 22.04 AMI,</li>
+<li>configure SSH access safely,</li>
+<li>launch a CPU EC2 instance with storage,</li>
+<li>connect via SSH,</li>
+<li>manage the full instance lifecycle.</li>
+</ul>
+<p>This workflow applies directly to <strong>GPU instances</strong>,
+with only minor changes.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ebs-basics/" class="btn btn-neutral float-right" title="EBS Basics">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../ebs-basics/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

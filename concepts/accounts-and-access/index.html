@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Accounts and Access - BangLab AWS EC2 Guide</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Accounts and Access";
+        var mkdocs_page_input_path = "concepts/accounts-and-access.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Concepts</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Accounts and Access</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-aws-accounts-vs-users">1. AWS Accounts vs. Users</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#aws-account">AWS Account</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#aws-user">AWS User</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#the-key-difference-very-important">The Key Difference (Very Important)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-permission-sets">2. Permission Sets</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#example">Example</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#what-permission-sets-mean-for-you">What Permission Sets Mean for You</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-aws-access-portal">3. AWS Access Portal</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-aws-console">4. AWS Console</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../organization-and-billing/">Organization and Billing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ec2-basics/">EC2 Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../s3-basics/">S3 Basics</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Access & Capabilities</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Onboarding</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-access-portal/">AWS Access Portal Login</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-cli-setup/">AWS CLI Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/vcpu-quota/">vCPU Quota</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">EC2</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/gpu-instances/">GPU Instances</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">S3</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/workflow/">S3 Workflow</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">BangLab AWS EC2 Guide</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Concepts</li>
+      <li class="breadcrumb-item active">Accounts and Access</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="accounts-and-access">Accounts and Access</h1>
+<p>This page explains <strong>how access to AWS is structured in BangLab</strong>.</p>
+<p>If you feel that some AWS concepts are confusing at first — that is normal.
+This section is here to remove that confusion.</p>
+<hr />
+<h2 id="1-aws-accounts-vs-users">1. AWS Accounts vs. Users</h2>
+<p>In AWS, <strong>accounts</strong> and <strong>users</strong> are two very different concepts.</p>
+<h3 id="aws-account">AWS Account</h3>
+<p>An <strong>AWS account</strong> is a <strong>container of resources</strong>.<br />
+It owns things like:</p>
+<ul>
+<li>EC2 instances (including GPUs)</li>
+<li>S3 buckets and data</li>
+<li>service quotas (e.g. vCPU limits)</li>
+<li>billing and credits</li>
+</ul>
+<hr />
+<h3 id="aws-user">AWS User</h3>
+<p>An <strong>AWS user</strong> represents a <strong>real human</strong> (you).</p>
+<p>A user:</p>
+<ul>
+<li>logs in via SSO (Single Sign-On)</li>
+<li>does <strong>not</strong> directly own resources</li>
+<li>may have access to <strong>multiple AWS accounts</strong></li>
+</ul>
+<p>You can think of a user as: </p>
+<p><em>A person who is allowed to operate inside one or more accounts.</em></p>
+<hr />
+<h3 id="the-key-difference-very-important">The Key Difference (Very Important)</h3>
+<p>Accounts and users are <strong>not the same thing</strong>.</p>
+<ul>
+<li>One <strong>AWS account</strong> can be accessed by <strong>many users</strong></li>
+<li>One <strong>user</strong> can access <strong>many AWS accounts</strong></li>
+</ul>
+<p>This separation is intentional and is what allows labs and organizations
+to manage shared infrastructure safely.</p>
+<hr />
+<h2 id="2-permission-sets">2. Permission Sets</h2>
+<p>An AWS account and a user are connected by a <strong>permission set</strong>.</p>
+<p>A <strong>permission set</strong> defines:</p>
+<ul>
+<li>what actions a user is allowed to perform</li>
+<li>which services they can use</li>
+<li>what they are <em>not</em> allowed to do</li>
+</ul>
+<p>You can think of it as: </p>
+<p><em>What is this user allowed to do inside this account?</em></p>
+<hr />
+<h3 id="example">Example</h3>
+<ul>
+<li><strong>Alice (user)</strong>  </li>
+<li><strong>Alice (account)</strong>  </li>
+<li><strong>EC2-GPU-Operator (permission set)</strong>  </li>
+</ul>
+<p>Together, this means:</p>
+<p><em>Alice can operate GPU EC2 instances and use S3 <em>within the limits defined by the EC2-GPU-Operator role</em></em></p>
+<p>Another example:</p>
+<ul>
+<li><strong>Bob (user)</strong>  </li>
+<li><strong>Alice (account)</strong>  </li>
+<li><strong>AdministratorAccess (permission set)</strong>  </li>
+</ul>
+<p>This means:</p>
+<p><em>Bob has full administrative access over the Alice account</em></p>
+<hr />
+<h3 id="what-permission-sets-mean-for-you">What Permission Sets Mean for You</h3>
+<p>As a researcher, you are not an administrator by default.</p>
+<p>Instead, you are given a permission set designed specifically for
+research workflows.</p>
+<p>Currently, BangLab currently provides:</p>
+<ul>
+<li>
+<p><strong>EC2-GPU-Operator</strong> </p>
+<ul>
+<li>Launch, stop, and terminate GPU EC2 instances  </li>
+<li>Access S3 storage  </li>
+<li>View limited billing and usage information  </li>
+</ul>
+</li>
+</ul>
+<p>If something is blocked or unavailable in the console, it is usually
+because it is outside the scope of the permission set.</p>
+<hr />
+<h2 id="3-aws-access-portal">3. AWS Access Portal</h2>
+<p>BangLab uses <strong>Single Sign-On (SSO)</strong> login to manage access: </p>
+<ul>
+<li>you log in through the <strong>AWS access portal</strong></li>
+<li>you select an account and a permission set</li>
+<li>AWS grants you temporary access automatically</li>
+</ul>
+<hr />
+<h2 id="4-aws-console">4. AWS Console</h2>
+<p>The <strong>AWS Access Portal</strong> is the <strong>entry point</strong> for logging in.
+It is <strong>not</strong> where you manage AWS resources.</p>
+<p>After logging in via the access portal and selecting:</p>
+<ul>
+<li>an AWS account, and</li>
+<li>a permission set (e.g. <code>EC2-GPU-Operator</code>),</li>
+</ul>
+<p>you are redirected to the <strong>AWS Management Console</strong>.</p>
+<p>The AWS Management Console (often called the <strong>AWS console</strong>) is:</p>
+<ul>
+<li>the main web interface for AWS,</li>
+<li>where you create and manage resources such as EC2 and S3,</li>
+<li>scoped by the permission set you selected.</li>
+</ul>
+<p>In short:</p>
+<ul>
+<li><strong>AWS Access Portal</strong> → <em>Who are you? Which account? Which role?</em></li>
+<li><strong>AWS Console</strong> → <em>Manage resources within that role</em></li>
+</ul>
+<p>Each permission set opens the AWS console
+with a different set of allowed actions.</p>
+<hr />
+<h2 id="summary">Summary</h2>
+<ul>
+<li><strong>AWS accounts</strong> hold resources and billing</li>
+<li><strong>Users</strong> represent real people</li>
+<li><strong>Permission sets</strong> define what a user can do in an account</li>
+<li>You access AWS through an <strong>SSO login</strong>, not personal AWS accounts</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../organization-and-billing/" class="btn btn-neutral float-right" title="Organization and Billing">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../organization-and-billing/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

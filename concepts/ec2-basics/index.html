@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>EC2 Basics - BangLab AWS EC2 Guide</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "EC2 Basics";
+        var mkdocs_page_input_path = "concepts/ec2-basics.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Concepts</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../accounts-and-access/">Accounts and Access</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../organization-and-billing/">Organization and Billing</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">EC2 Basics</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-what-ec2-is">1. What EC2 Is</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-storage-ebs-elastic-block-store">2. Storage: EBS (Elastic Block Store)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-gpu-instances">3. GPU Instances</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-regions-and-availability">4. Regions and Availability</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-vcpu-quotas-very-important">5. vCPU Quotas (Very Important)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-ec2-pricing">6. EC2 Pricing</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../s3-basics/">S3 Basics</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Access & Capabilities</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Onboarding</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-access-portal/">AWS Access Portal Login</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-cli-setup/">AWS CLI Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/vcpu-quota/">vCPU Quota</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">EC2</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/gpu-instances/">GPU Instances</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">S3</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/workflow/">S3 Workflow</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">BangLab AWS EC2 Guide</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Concepts</li>
+      <li class="breadcrumb-item active">EC2 Basics</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ec2-basics">EC2 Basics</h1>
+<p>This page provides a <strong>minimal mental model</strong> of EC2 as used in BangLab.
+Details and tutorials are covered later.</p>
+<hr />
+<h2 id="1-what-ec2-is">1. What EC2 Is</h2>
+<p>Amazon EC2 provides <strong>virtual machines</strong>, called <strong>instances</strong>.</p>
+<p>An EC2 instance is:</p>
+<ul>
+<li>a server running in the cloud</li>
+<li>accessed via SSH</li>
+<li>where you have <strong>root access</strong></li>
+</ul>
+<h2 id="2-storage-ebs-elastic-block-store">2. Storage: EBS (Elastic Block Store)</h2>
+<p>EC2 instances use <strong>EBS (Elastic Block Store)</strong> for disk storage.</p>
+<p>You can think of:</p>
+<ul>
+<li>EC2 = the computer</li>
+<li>EBS = the hard drive</li>
+</ul>
+<hr />
+<h2 id="3-gpu-instances">3. GPU Instances</h2>
+<p>Some EC2 instances include <strong>GPUs</strong>. 
+GPU availability depends on the <strong>instance type</strong> and <strong>region</strong>. </p>
+<p>For an up-to-date list of supported GPU instances and drivers, see:
+<a href="https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html">https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html</a></p>
+<hr />
+<h2 id="4-regions-and-availability">4. Regions and Availability</h2>
+<p>AWS resources are created in <strong>regions</strong>.</p>
+<p>BangLab primarily uses the <strong>us-east-1</strong> region. 
+Unless stated otherwise, all documentation assumes <strong>us-east-1</strong>.</p>
+<hr />
+<h2 id="5-vcpu-quotas-very-important">5. vCPU Quotas (Very Important)</h2>
+<p>EC2 usage is limited by <strong>vCPU quotas</strong> at the <strong>account level</strong>.</p>
+<p>Key points: </p>
+<ul>
+<li>Every EC2 instance requires a certain number of vCPUs</li>
+<li>Different instance types require different vCPU counts</li>
+<li>A new AWS account typically starts with <strong>0 vCPU quota</strong></li>
+</ul>
+<p>vCPU quotas can be increased by an administrator submitting a request to AWS.</p>
+<hr />
+<h2 id="6-ec2-pricing">6. EC2 Pricing</h2>
+<p>EC2 instances are billed based on:</p>
+<ul>
+<li>instance type</li>
+<li>whether the instance is running</li>
+<li>usage duration</li>
+</ul>
+<p>Pricing varies significantly between instance types.</p>
+<p>For cost estimation and comparison, use the official AWS Pricing Calculator:
+<a href="https://calculator.aws/">https://calculator.aws/</a></p>
+<p>Understanding pricing helps avoid surprises, but you do not need to memorize prices.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../organization-and-billing/" class="btn btn-neutral float-left" title="Organization and Billing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../s3-basics/" class="btn btn-neutral float-right" title="S3 Basics">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../organization-and-billing/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../s3-basics/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
