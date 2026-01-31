@@ -3,10 +3,12 @@
 This page walks through a **typical S3 workflow in BangLab**.
 
 We use:
+
 - the **AWS console** for one-time setup (bucket creation),
 - the **AWS CLI** for day-to-day data transfer.
 
 The same CLI commands work on:
+
 - your local laptop,
 - EC2 instances.
 
@@ -15,10 +17,12 @@ The same CLI commands work on:
 ## Prerequisites
 
 Before starting, make sure you have:
+
 - completed **Onboarding**,
 - authenticated to AWS console and AWS CLI (as EC2-GPU-Operator)
 
 All examples assume:
+
 - region: `us-east-1`.
 
 ---
@@ -95,7 +99,7 @@ You can check by running:
 
 ```bash
 aws --version
-````
+```
 
 If the command is not found, install the AWS CLI before continuing.
 
