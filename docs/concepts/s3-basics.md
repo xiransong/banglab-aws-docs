@@ -1,64 +1,35 @@
 # S3 Basics
 
 This page introduces **what S3 is and how BangLab uses it**.
-It focuses on the core ideas needed to avoid confusion,
-not on commands or detailed usage.
+It focuses on the core ideas needed to avoid confusion. 
 
 ---
 
-## 1. What S3 Is
+## What S3 Is
 
 S3 (Simple Storage Service) is **object storage**.
 
-S3 is used to store:
+Key characteristics:
 
-- datasets
-- experiment outputs
-- model checkpoints
-- logs and artifacts
-
-You can think of S3 as:
-> “A durable place to store files, not a machine you log into.”
-
----
-
-## 2. S3 Is *Not* a Filesystem
-
-S3 does **not** behave like a traditional filesystem.
-
-Key differences:
-
-- There is no real directory tree
-- Files are stored as **objects**
+- data is stored as **objects**, not files,
+- objects live inside **buckets**,
 - “Folders” are just **name prefixes**
 
 ---
 
-## 3. Buckets and Objects
+## What S3 Is *Not*
 
-S3 data lives inside **buckets**.
+S3 is **not a filesystem**.
 
-Important points about buckets:
+In particular:
 
-- A bucket is a top-level container
-- Bucket names must be globally unique
-- Buckets belong to a specific AWS account
+- there is no true directory hierarchy,
+- objects cannot be appended to (an upload replaces the object),
+- latency is higher than EC2 disks.
 
-Inside a bucket:
+Because of this, S3 is **not suitable for**:
 
-- Each file is an **object**
-- Objects are identified by a **key**
-- Keys often look like file paths, but they are just strings
+- frequent small writes,
+- line-by-line logging,
+- scratch space during training.
 
-Example:
-
-```
-s3://my-bucket/datasets/humanml3d/train.npy
-```
-
----
-
-## Summary
-
-- S3 is **object storage**, not a filesystem
-- Data is stored in **buckets** as **objects**

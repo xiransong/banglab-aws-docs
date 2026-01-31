@@ -17,16 +17,13 @@ Before following the tutorials in this section, make sure you have:
 - completed the **Onboarding** process,
 - have at least 2 vCPU quotas. 
 
-If you don't have vCPU quotas yet, ask an administrator for quota increase. 
-
 ---
 
 ## What This Section Covers
 
 This section includes:
 
-- a complete step-by-step lifecycle of a **CPU EC2 instance**,
-- brief guidance on launching **GPU EC2 instances**,
-- a **cheat sheet** with reusable CLI commands and scripts.
+- a complete step-by-step lifecycle of a **CPU EC2 instance**, and
+- a brief guidance on launching **GPU EC2 instances**.
 
 Follow the pages in order if this is your first time using EC2.

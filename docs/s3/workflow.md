@@ -149,11 +149,3 @@ A common and safe workflow is:
 4. Download data elsewhere when needed
 
 Avoid writing to S3 at very high frequency during training.
-
----
-
-## Summary
-
-* Buckets are created once, usually via the browser
-* Daily S3 usage is done via the AWS CLI
-* The same commands work on laptops and EC2 instances

@@ -109,13 +109,13 @@ This confirms that:
 
 ## Common Notes
 
-* CLI credentials are **temporary** (8 hours)
+* CLI credentials are **temporary** (8 hours for EC2-GPU-Operator).
   You may need to re-authenticate periodically.
 
-* You do **not** need to manage access keys
+* You do **not** need to manage access keys.
   SSO handles credential generation and rotation automatically.
 
-* If authentication expires, simply run any AWS CLI command
+* If authentication expires, simply run any AWS CLI command. 
   and follow the login prompt again.
 
 ---

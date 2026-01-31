@@ -23,6 +23,7 @@ nav:
   - EC2:
       - Overview: ec2/index.md
       - CPU Instance Lifecycle: ec2/cpu-instance-lifecycle.md
+      - EBS Basics: ec2/ebs-basics.md
       - GPU Instances: ec2/gpu-instances.md
   - S3:
       - Overview: s3/index.md

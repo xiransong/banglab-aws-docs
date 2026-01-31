@@ -25,7 +25,7 @@ This documentation is intended for:
 
 ## 🚀 New Here? Start This Way
 
-If this is your first time using AWS in the lab, follow this order:
+If this is your first time using AWS in the lab, **follow this order**:
 
 1. **Concepts**  
    Understand the basic ideas behind AWS, EC2, S3, and SSO.
@@ -37,7 +37,7 @@ If this is your first time using AWS in the lab, follow this order:
    Set up login, MFA, and the AWS CLI correctly.
 
 4. **EC2 Tutorials**  
-   Launch GPU instances and run experiments.
+   Launch and manage EC2 instances.
 
 5. **S3 Tutorials**  
-   Store and manage data safely.
+   Store and manage data.

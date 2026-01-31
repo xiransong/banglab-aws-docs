@@ -34,7 +34,7 @@ Click **“Accept Invitation”**, then:
 Once password and MFA are set up:
 
 1. Log in to the AWS access portal:  
-   https://banglab-udem-mila.awsapps.com/start
+   [https://banglab-udem-mila.awsapps.com/start](https://banglab-udem-mila.awsapps.com/start)
 2. You will see your **AWS account**
 3. Click the **EC2-GPU-Operator** permission set
 
@@ -42,7 +42,7 @@ You will then be redirected to the **AWS Management Console**.
 
 ---
 
-## Using the AWS Console
+## Step 3 - Using the AWS Console
 
 The AWS console is a **general-purpose web interface**
 for managing AWS services.
@@ -57,10 +57,6 @@ Use the search bar to find services by name, for example:
 - type `EC2` → open the EC2 dashboard
 - type `S3` → open the S3 dashboard
 
-This is the recommended way to navigate the console.
-
-You do not need to memorize where services are located.
-
 ### What to Expect
 
 - The console shows only actions allowed by your permission set
@@ -68,7 +64,7 @@ You do not need to memorize where services are located.
 - This is expected and intentional
 
 At this point, your **web-based AWS access is ready**.
-You can view and monitor resources using the console.
+You can view and manage resources using the console.
 
 ---
 

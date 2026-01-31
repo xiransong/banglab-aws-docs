@@ -23,18 +23,16 @@ For example: Duo Mobile, Google Authenticator, or similar.
 (macOS, Linux, or Windows)  
 [https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-You do not need prior AWS experience.
-
 ---
 
 ## Onboarding Flow
 
 Onboarding consists of three main steps:
 
-1. **Set up AWS access portal login**
+1. **Set up AWS access portal login (SSO login)**
 
-    - Create your password  
-    - Configure MFA  
+    - Create your password 
+    - Configure MFA 
     - Log in via the BangLab AWS access portal:  
    [https://banglab-udem-mila.awsapps.com/start](https://banglab-udem-mila.awsapps.com/start)
 

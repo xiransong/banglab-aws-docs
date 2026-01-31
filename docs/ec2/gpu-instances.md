@@ -25,13 +25,8 @@ is the same.
 
 To use GPUs, you must choose a **GPU-enabled instance type**.
 
-Examples include:
-- `g4dn.*`
-- `g5.*`
-- `g6.*`
-- `p4.*`, `p5.*`
-
 Which instance types are available depends on:
+
 - your AWS region (we use `us-east-1`),
 - your approved vCPU quota.
 
@@ -117,12 +112,3 @@ for the instance type.
 You do not need to memorize prices.
 The goal is simply to be **aware of the cost scale**
 before launching an instance.
-
----
-
-## Summary
-
-* GPU instances use the **same EC2 workflow** as CPU instances
-* The main change is the **instance type**
-* GPU instances require approved **vCPU quota**
-* Be mindful of cost

@@ -8,8 +8,6 @@ The following guidelines help:
 - maintain clarity within each account,
 - and ensure smooth operation across the lab.
 
-These are standard expectations for responsible use of cloud resources.
-
 ---
 
 ## EC2 Usage
@@ -35,19 +33,11 @@ Tags help you:
 - distinguish different projects or experiments,
 - understand where costs come from within your account.
 
-Recommended minimal tags:
-
-- `Project` (e.g. `LLM-skill`, `HumanMotion`)
-- `Purpose` (e.g. `debug`, `training`)
-
-Tags are lightweight and low-risk, but very helpful.
-
 ---
 
 ## GPU & Quota Awareness
 
-- GPU capacity is limited and shared at the lab level
-- vCPU quotas apply per account
+- GPU capacity is limited at the account level, since vCPU quotas apply per account
 
 ---
 
@@ -63,11 +53,3 @@ Tags are lightweight and low-risk, but very helpful.
 
 - You do **not** pay personally for AWS usage
 - All usage consumes **shared lab credits**
-
----
-
-## When in Doubt
-
-If you are unsure whether a workflow is appropriate:
-- check the documentation,
-- or ask an administrator before proceeding.
