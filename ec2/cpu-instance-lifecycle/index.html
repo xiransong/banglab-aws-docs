@@ -182,9 +182,11 @@ to monitor and verify state.</p>
 <p>Make sure you have:</p>
 <ul>
 <li>
-<p>logged in to the AWS access portal<br />
-  https://banglab-udem-mila.awsapps.com/start<br />
-  selected your account, and chosen <strong>EC2-GPU-Operator</strong> to open the AWS console</p>
+<p>logged in to the AWS access portal: 
+  <a href="https://banglab-udem-mila.awsapps.com/start">https://banglab-udem-mila.awsapps.com/start</a></p>
+</li>
+<li>
+<p>selected your account, and chosen <strong>EC2-GPU-Operator</strong> to open the AWS console</p>
 </li>
 <li>
 <p>authenticated in your terminal using SSO:</p>
@@ -239,12 +241,12 @@ to AWS.</p>
 <li>Search for “Ubuntu 22.04”</li>
 <li>
 <p>Prefer images:</p>
-</li>
-<li>
-<p>owned by <strong>Canonical</strong></p>
-</li>
+<ul>
+<li>owned by <strong>Canonical</strong></li>
 <li>marked as <strong>64-bit (x86)</strong></li>
 <li>with recent creation dates</li>
+</ul>
+</li>
 </ul>
 <p>The CLI method above simply automates this selection.</p>
 <hr />
@@ -275,9 +277,9 @@ aws ec2 authorize-security-group-ingress \
 <ul>
 <li>
 <p>EC2 → <strong>Security Groups</strong></p>
-</li>
-<li>
-<p>Check inbound rule: TCP 22 from your IP</p>
+<ul>
+<li>Check inbound rule: TCP 22 from your IP</li>
+</ul>
 </li>
 </ul>
 <hr />
@@ -288,10 +290,8 @@ aws ec2 authorize-security-group-ingress \
 <li>requires <strong>2 vCPUs</strong></li>
 <li>suitable for lightweight testing</li>
 </ul>
-<blockquote>
 <p>If your account still has <strong>0 vCPU quota</strong>, this step will fail.
 Request a quota increase before continuing.</p>
-</blockquote>
 <p>Launch the instance:</p>
 <pre><code class="language-bash">aws ec2 run-instances \
   --region us-east-1 \
@@ -315,29 +315,25 @@ Request a quota increase before continuing.</p>
 <ul>
 <li>
 <p><strong>EBS (your disk) configuration</strong></p>
-</li>
-<li>
-<p>Sets a 30 GB root volume</p>
-</li>
-<li>
-<p>Data is deleted automatically when the instance is terminated</p>
+<ul>
+<li>Sets a 30 GB root volume</li>
+<li>Data is deleted automatically when the instance is terminated</li>
+</ul>
 </li>
 <li>
 <p><strong>Tags</strong></p>
-</li>
-<li>
-<p><code>Value=cpu-test</code> helps identify the instance in the console</p>
-</li>
-<li>
-<p>Tags are labels for organization and cost visibility</p>
+<ul>
+<li><code>Value=cpu-test</code> helps identify the instance in the console</li>
+<li>Tags are labels for organization and cost visibility</li>
+</ul>
 </li>
 <li>
 <p><strong>CLI output</strong></p>
-</li>
-<li>
-<p>The command returns a large JSON response</p>
-</li>
+<ul>
+<li>The command returns a large JSON response</li>
 <li>Press <code>q</code> to exit the pager</li>
+</ul>
+</li>
 </ul>
 <h3 id="monitor-in-browser_2">Monitor in Browser</h3>
 <ul>
@@ -345,13 +341,13 @@ Request a quota increase before continuing.</p>
 <li>Watch state change: <code>pending</code> → <code>running</code></li>
 <li>
 <p>Check:</p>
-</li>
-<li>
-<p>Instance type</p>
-</li>
+<ul>
+<li>Instance type</li>
 <li><strong>Instance ID</strong></li>
 <li><strong>Public IPv4 address</strong></li>
 <li>Tags</li>
+</ul>
+</li>
 </ul>
 <p>You will need instance ID and public IPv4 address. </p>
 <hr />
