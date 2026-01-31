@@ -158,19 +158,27 @@
               
                 <h1 id="s3-workflow">S3 Workflow</h1>
 <p>This page walks through a <strong>typical S3 workflow in BangLab</strong>.</p>
-<p>We use:
-- the <strong>AWS console</strong> for one-time setup (bucket creation),
-- the <strong>AWS CLI</strong> for day-to-day data transfer.</p>
-<p>The same CLI commands work on:
-- your local laptop,
-- EC2 instances.</p>
+<p>We use:</p>
+<ul>
+<li>the <strong>AWS console</strong> for one-time setup (bucket creation),</li>
+<li>the <strong>AWS CLI</strong> for day-to-day data transfer.</li>
+</ul>
+<p>The same CLI commands work on:</p>
+<ul>
+<li>your local laptop,</li>
+<li>EC2 instances.</li>
+</ul>
 <hr />
 <h2 id="prerequisites">Prerequisites</h2>
-<p>Before starting, make sure you have:
-- completed <strong>Onboarding</strong>,
-- authenticated to AWS console and AWS CLI (as EC2-GPU-Operator)</p>
-<p>All examples assume:
-- region: <code>us-east-1</code>.</p>
+<p>Before starting, make sure you have:</p>
+<ul>
+<li>completed <strong>Onboarding</strong>,</li>
+<li>authenticated to AWS console and AWS CLI (as EC2-GPU-Operator)</li>
+</ul>
+<p>All examples assume:</p>
+<ul>
+<li>region: <code>us-east-1</code>.</li>
+</ul>
 <hr />
 <h2 id="step-1-create-a-bucket-browser-one-time">Step 1 — Create a Bucket (Browser, One-Time)</h2>
 <p>Buckets are typically created <strong>once</strong>, using the AWS console.</p>
@@ -217,14 +225,10 @@
 <p>On many official AMIs, the AWS CLI is already installed.
 You can check by running:</p>
 <pre><code class="language-bash">aws --version
-````
-
-If the command is not found, install the AWS CLI before continuing.
-
-For Ubuntu-based instances (e.g. Ubuntu 22.04):
-
-```bash
-sudo apt update
+</code></pre>
+<p>If the command is not found, install the AWS CLI before continuing.</p>
+<p>For Ubuntu-based instances (e.g. Ubuntu 22.04):</p>
+<pre><code class="language-bash">sudo apt update
 sudo apt install -y awscli
 </code></pre>
 <p>Once the AWS CLI is available, you can use the same
