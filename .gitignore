@@ -1,4 +1,12 @@
-.DS_Store
-*.zip
-
+# MkDocs build output
 site/
+
+# Local release artifacts
+dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store

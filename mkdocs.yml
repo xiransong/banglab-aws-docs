@@ -1,5 +1,8 @@
 site_name: BangLab AWS EC2 Guide
 
+extra:
+  version: v0.1.0
+
 theme:
   name: readthedocs
 
