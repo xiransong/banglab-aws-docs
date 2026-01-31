@@ -9,3 +9,25 @@ theme:
     - scheme: slate
       primary: teal
       accent: green
+
+nav:
+  - Home: index.md
+  - Concepts:
+      - Overview: concepts/index.md
+      - Accounts and Access: concepts/accounts-and-access.md
+      - Organization and Billing: concepts/organization-and-billing.md
+      - EC2 Basics: concepts/ec2-basics.md
+      - S3 Basics: concepts/s3-basics.md
+  - Access & Capabilities:
+      - Overview: access-and-capabilities/index.md
+      - EC2-GPU-Operator: access-and-capabilities/ec2-gpu-operator.md
+      - Usage Guidelines: access-and-capabilities/usage-guidelines.md
+  - Onboarding:
+      - Overview: onboarding/index.md
+      - AWS Access Portal Login: onboarding/aws-access-portal.md
+      - AWS CLI Setup: onboarding/aws-cli-setup.md
+      - vCPU Quota: onboarding/vcpu-quota.md
+  - EC2:
+      - Overview: ec2/index.md
+  - S3:
+      - Overview: s3/index.md

@@ -1,20 +1,43 @@
-# THIS SHOULD CHANGE
+# BangLab AWS Compute & Storage Guide
 
-Welcome to the AWS EC2 usage guide.
+Welcome! This site documents how **BangLab** uses AWS to support research workloads, 
+with a focus on **GPU compute (EC2)** and **object storage (S3)**.
 
-![Test image](assets/test.png)
+This is **not** a general AWS tutorial.  
+It is a **lab-specific guide** describing:
 
-## Commands
+- what resources are available to you, and 
+- how to use AWS safely and efficiently in our research environment.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+---
 
-## Project layout
+## 🎯 Who This Guide Is For
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+This documentation is intended for:
 
+- PhD students, MSc students, and researchers in BangLab
+- Lab members who need **on-demand GPU compute**
+- Anyone storing datasets, checkpoints, or experiment outputs on **S3**
+
+**No prior AWS experience is assumed.**
+
+---
+
+## 🚀 New Here? Start This Way
+
+If this is your first time using AWS in the lab, follow this order:
+
+1. **Concepts**  
+   Understand the basic ideas behind AWS, EC2, S3, and SSO.
+
+2. **Access & Capabilities**  
+   Learn what your permission set allows you to do.
+
+3. **Onboarding**  
+   Set up login, MFA, and the AWS CLI correctly.
+
+4. **EC2 Tutorials**  
+   Launch GPU instances and run experiments.
+
+5. **S3 Tutorials**  
+   Store and manage data safely.
