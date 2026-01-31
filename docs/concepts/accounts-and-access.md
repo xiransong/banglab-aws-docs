@@ -135,6 +135,33 @@ This is the standard and recommended way to use AWS in organizations.
 
 ---
 
+## AWS Management Console
+
+The **AWS Access Portal** is the **entry point** for logging in.
+It is **not** where you manage AWS resources.
+
+After logging in via the access portal and selecting:
+- an AWS account, and
+- a permission set (e.g. `EC2-GPU-Operator`),
+
+you are redirected to the **AWS Management Console**.
+
+The AWS Management Console (often called the **AWS console**) is:
+
+- the main web interface for AWS,
+- where you create and manage resources such as EC2 and S3,
+- scoped by the permission set you selected.
+
+In short:
+
+- **AWS Access Portal** → *Who are you? Which account? Which role?*
+- **AWS Console** → *Manage resources within that role*
+
+Each permission set opens the AWS console
+with a different set of allowed actions.
+
+---
+
 ## Summary
 
 - **AWS accounts** hold resources and billing

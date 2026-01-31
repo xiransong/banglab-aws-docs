@@ -31,21 +31,21 @@ You do not need prior AWS experience.
 
 Onboarding consists of three main steps:
 
-1. **Set up AWS access portal login** 
+1. **Set up AWS access portal login**
 
- - Create your password  
- - Configure MFA  
- - Log in via the BangLab AWS access portal:  
+    - Create your password  
+    - Configure MFA  
+    - Log in via the BangLab AWS access portal:  
    [https://banglab-udem-mila.awsapps.com/start](https://banglab-udem-mila.awsapps.com/start)
 
-2. **Set up AWS CLI** 
+2. **Set up AWS CLI**
 
- - Configure the CLI using SSO  
- - Verify that command-line access works
+    - Configure the CLI using SSO  
+    - Verify that command-line access works
 
 3. **Request vCPU quota (if needed)** 
 
- - New accounts often start with zero GPU vCPU quota  
- - An administrator can submit a quota increase request
+    - New accounts often start with zero GPU vCPU quota  
+    - An administrator can submit a quota increase request
 
 Each step is described in detail on the following pages.
