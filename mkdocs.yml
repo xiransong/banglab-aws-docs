@@ -1,14 +1,7 @@
 site_name: BangLab AWS EC2 Guide
 
 theme:
-  name: material
-  palette:
-    - scheme: default
-      primary: teal
-      accent: green
-    - scheme: slate
-      primary: teal
-      accent: green
+  name: readthedocs
 
 nav:
   - Home: index.md
@@ -29,5 +22,8 @@ nav:
       - vCPU Quota: onboarding/vcpu-quota.md
   - EC2:
       - Overview: ec2/index.md
+      - CPU Instance Lifecycle: ec2/cpu-instance-lifecycle.md
+      - GPU Instances: ec2/gpu-instances.md
   - S3:
       - Overview: s3/index.md
+      - S3 Workflow: s3/workflow.md
