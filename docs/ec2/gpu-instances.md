@@ -31,7 +31,10 @@ Which instance types are available depends on:
 - your approved vCPU quota.
 
 Refer to the official AWS documentation for supported GPU instances:
-https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html
+[https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html](https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html)
+
+You can start with the cost-effective T4 GPU instances (e.g., g4dn.xlarge): 
+[https://aws.amazon.com/cn/ec2/instance-types/g4/](https://aws.amazon.com/cn/ec2/instance-types/g4/)
 
 ---
 
@@ -45,15 +48,23 @@ If you don't have vCPU quotas yet, ask an administrator for quota increase.
 
 ## Launching a GPU Instance
 
+[Deep Learning Base AMI with Single CUDA](https://docs.aws.amazon.com/dlami/latest/devguide/aws-deep-learning-x86-base-with-single-cuda-ami-ubuntu-22-04.html)
+is the recommended AMI, which can also be used to run a CPU instance. 
+
+In the AWS console:
+
+* Go to **EC2 → AMIs**
+* Search for the AMI you want to use and copy the AMI ID
+
 Launching a GPU instance is identical to launching a CPU instance,
 except for the instance type.
 
-Example (replace `<GPU_INSTANCE_TYPE>`):
+Example (replace `<AMI_ID>` and `<GPU_INSTANCE_TYPE>`):
 
 ```bash
 aws ec2 run-instances \
   --region us-east-1 \
-  --image-id ${AMI_ID} \
+  --image-id <AMI_ID> \
   --instance-type <GPU_INSTANCE_TYPE> \
   --key-name banglab-key \
   --security-groups banglab-ssh \

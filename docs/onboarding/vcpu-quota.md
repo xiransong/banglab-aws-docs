@@ -9,8 +9,9 @@ and how to request an increase when needed.
 
 For a newly created AWS account:
 
+- Some initial CPU-related vCPU quota is nonzero
 - The initial **GPU-related vCPU quota is 0**
-- This means EC2 CPU and GPU instances cannot be launched immediately
+- This means EC2 GPU instances cannot be launched immediately
 - This is expected and normal
 
 ---

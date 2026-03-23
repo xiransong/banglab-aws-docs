@@ -67,7 +67,7 @@ You will reuse this key pair for future instances.
 
 An **AMI (Amazon Machine Image)** defines the operating system of the instance.
 
-We use **Ubuntu 22.04 LTS** as an example.
+We use **Ubuntu 22.04 LTS** as an example. You can either use the CLI or use the AWS console:
 
 ### Using the CLI
 
@@ -94,13 +94,13 @@ In the AWS console:
 
 * Go to **EC2 → AMIs**
 * Search for “Ubuntu 22.04”
-* Prefer images:
 
-    * owned by **Canonical**
-    * marked as **64-bit (x86)**
-    * with recent creation dates
+![aws console - AMI search](../assets/images/aws-console-ami-search.png)
 
-The CLI method above simply automates this selection.
+
+For later GPU instances, [Deep Learning Base AMI with Single CUDA](https://docs.aws.amazon.com/dlami/latest/devguide/aws-deep-learning-x86-base-with-single-cuda-ami-ubuntu-22-04.html)
+is recommended. 
+The Deep Learning Base AMI can also be used to run a CPU instance. 
 
 ---
 
@@ -135,11 +135,13 @@ aws ec2 authorize-security-group-ingress \
   --cidr ${MY_IP}/32
 ```
 
-### Monitor in Browser
+### Monitor or Edit in Browser
 
 * EC2 → **Security Groups**
 
     * Check inbound rule: TCP 22 from your IP
+
+![aws-security-group-inbound-rules](../assets/images/aws-security-group-inbound-rules.png)
 
 ---
 
@@ -202,7 +204,9 @@ aws ec2 run-instances \
     * **Public IPv4 address**
     * Tags
 
-**You will need instance ID and public IPv4 address.** 
+**You will need the public IPv4 address.** 
+
+![aws-instance-ip](../assets/images/aws-instance-ip-address.png)
 
 ---
 
@@ -229,6 +233,8 @@ If this works, the instance is ready for use.
 You can Stop, Start, or Terminate in the AWS web console: 
 
 * EC2 → **Instances**
+
+![AWS Management Console - Instance State](../assets/images/aws-instance-state.png)
 
 Or you can use these commands in your laptop:
 
