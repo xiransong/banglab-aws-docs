@@ -14,8 +14,7 @@ We primarily use:
 
 Before following the tutorials in this section, make sure you have:
 
-- completed the **Onboarding** process,
-- have at least 2 vCPU quotas. 
+- completed the **Onboarding** process
 
 ---
 

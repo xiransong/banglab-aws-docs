@@ -13,7 +13,7 @@ this page should feel very familiar.
 Compared to CPU instances, GPU instances differ mainly in:
 
 - **Instance type** (GPU-enabled families)
-- **vCPU quota requirement**
+- **vCPU quota requirement** (e.g. quota for Running On-Demand G and VT instances)
 - **Cost**
 
 The overall workflow (key pair, AMI, security group, SSH, lifecycle)

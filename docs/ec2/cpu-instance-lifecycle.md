@@ -23,7 +23,7 @@ Make sure you have:
 
 - selected your account, and chosen **EC2-GPU-Operator** to open the AWS console
 
-- authenticated in your terminal using SSO:
+- authenticated in your laptop terminal using SSO:
 
 ```bash
 aws sso login --profile <your-profile-name>
@@ -38,7 +38,7 @@ An EC2 key pair is used for **SSH access from your device**.
 We recommend creating an SSH key locally and uploading **only the public key**
 to AWS.
 
-Generate a key pair:
+Generate a key pair (Press Enter to select the default values.):
 
 ```bash
 ssh-keygen -t ed25519 -f ~/.ssh/banglab
@@ -149,11 +149,8 @@ Now we launch the instance.
 
 We use `t3.small` as an example:
 
-* requires **2 vCPUs**
+* requires **2 vCPUs** for All Standard (A, C, D, H, I, M, R, T, Z) Spot Instance Requests (this is usually satisfied for a new AWS account)
 * suitable for lightweight testing
-
-If your account still has **0 vCPU quota**, this step will fail.
-Request a quota increase before continuing.
 
 Launch the instance:
 
@@ -205,13 +202,13 @@ aws ec2 run-instances \
     * **Public IPv4 address**
     * Tags
 
-You will need instance ID and public IPv4 address. 
+**You will need instance ID and public IPv4 address.** 
 
 ---
 
 ## Phase 4 — SSH into the Instance
 
-Once the instance is `running`, connect via SSH:
+Once the instance is `running`, connect via SSH (remember to copy and paste the IP address):
 
 ```bash
 ssh -i ~/.ssh/banglab ubuntu@<PUBLIC_IP>
@@ -229,7 +226,11 @@ If this works, the instance is ready for use.
 
 ## Phase 5 — Stop, Start, and Terminate
 
-Return to your **local machine** for lifecycle commands.
+You can Stop, Start, or Terminate in the AWS web console: 
+
+* EC2 → **Instances**
+
+Or you can use these commands in your laptop:
 
 ### Stop the Instance
 

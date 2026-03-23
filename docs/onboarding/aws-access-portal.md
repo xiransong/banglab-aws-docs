@@ -38,7 +38,9 @@ Once password and MFA are set up:
 2. You will see your **AWS account**
 3. Click the **EC2-GPU-Operator** permission set
 
-You will then be redirected to the **AWS Management Console**.
+You will then be redirected to the **AWS Management Console**: 
+
+![AWS Management Console after selecting the EC2-GPU-Operator permission set](../assets/images/aws-console.png)
 
 ---
 

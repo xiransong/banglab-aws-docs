@@ -14,7 +14,7 @@ Make sure you have already:
 
 - completed password and MFA setup in the previous step,
 - successfully logged in to the AWS access portal,
-- installed the AWS CLI on your machine.
+- installed the AWS CLI on your machine [https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
 ---
 
@@ -48,7 +48,9 @@ aws configure sso
 
 You will be prompted for several values.
 
-Typical inputs look like:
+For some optional prompts, you can press Enter to accept the defaults.
+
+Please set these values: 
 
 * **SSO start URL**: `https://banglab-udem-mila.awsapps.com/start`
 
@@ -61,8 +63,6 @@ Typical inputs look like:
 * **Profile name**: choose a simple name, for example: `banglab`
 
 This profile name will be used in later AWS CLI commands.
-
-For other optional prompts, you can accept the defaults.
 
 The configuration will be stored in `~/.aws/config`.
 
