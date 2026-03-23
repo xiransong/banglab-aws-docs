@@ -3,6 +3,7 @@ site/
 
 # Local release artifacts
 dist/
+*.zip
 
 # Python
 __pycache__/
