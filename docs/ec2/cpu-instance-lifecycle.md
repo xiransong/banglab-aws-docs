@@ -44,7 +44,7 @@ Generate a key pair (Press Enter to select the default values.):
 ssh-keygen -t ed25519 -f ~/.ssh/banglab
 ```
 
-Upload the public key to AWS:
+Upload the public key to AWS (choose a key name, e.g. banglab-key):
 
 ```bash
 aws ec2 import-key-pair \
@@ -59,7 +59,9 @@ You will reuse this key pair for future instances.
 
 * EC2 → **Key Pairs**
 
-  * Confirm `banglab-key` appears in the list
+  * Confirm your key appears in the list
+
+![aws-key-pair](../assets/images/aws-key-pair.png)
 
 ---
 
