@@ -2,6 +2,10 @@
 
 This site documents how **BangLab** uses AWS to support research workloads
 
+## AWS lab administrator
+
+Current administrator is Xiran Song (xiran.song@umontreal.ca). Feel free to ask him questions!
+
 ## Reader Instructions
 
 1. Download and unzip `banglab-aws-docs-site.zip`
