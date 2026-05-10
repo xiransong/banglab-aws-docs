@@ -1,113 +1,305 @@
 {
-	"Version": "2012-10-17",
-	"Statement": [
-		{
-			"Sid": "EC2ReadOnly",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:Describe*"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "EC2Lifecycle",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:RunInstances",
-				"ec2:StartInstances",
-				"ec2:StopInstances",
-				"ec2:RebootInstances",
-				"ec2:TerminateInstances"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "EC2Tagging",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:CreateTags",
-				"ec2:DeleteTags"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "EC2KeyPairManagement",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:CreateKeyPair",
-				"ec2:DeleteKeyPair",
-				"ec2:DescribeKeyPairs",
-				"ec2:ImportKeyPair"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "EC2SecurityGroupManagement",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:CreateSecurityGroup",
-				"ec2:DeleteSecurityGroup",
-				"ec2:DescribeSecurityGroups",
-				"ec2:AuthorizeSecurityGroupIngress",
-				"ec2:RevokeSecurityGroupIngress",
-				"ec2:AuthorizeSecurityGroupEgress",
-				"ec2:RevokeSecurityGroupEgress"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "BillingReadOnly",
-			"Effect": "Allow",
-			"Action": [
-				"aws-portal:ViewBilling",
-				"aws-portal:ViewUsage",
-				"ce:GetCostAndUsage",
-				"ce:GetCostForecast",
-				"ce:GetDimensionValues",
-				"ce:GetTags"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "EBSLifecycle",
-			"Effect": "Allow",
-			"Action": [
-				"ec2:CreateVolume",
-				"ec2:DeleteVolume",
-				"ec2:AttachVolume",
-				"ec2:ModifyVolume",
-				"ec2:DetachVolume",
-				"ec2:DescribeVolumes",
-				"ec2:DescribeVolumeStatus",
-				"ec2:CreateSnapshot"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "S3FullAccessForUserBuckets",
-			"Effect": "Allow",
-			"Action": [
-				"s3:CreateBucket",
-				"s3:DeleteBucket",
-				"s3:ListAllMyBuckets",
-				"s3:GetBucketLocation",
-				"s3:ListBucket",
-				"s3:GetObject",
-				"s3:PutObject",
-				"s3:DeleteObject"
-			],
-			"Resource": "*"
-		},
-		{
-			"Sid": "ManageOwnBucketSettings",
-			"Effect": "Allow",
-			"Action": [
-				"s3:PutEncryptionConfiguration",
-				"s3:GetEncryptionConfiguration",
-				"s3:PutBucketVersioning",
-				"s3:GetBucketVersioning"
-			],
-			"Resource": "*"
-		}
-	]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EC2ReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowRunInstancesOnlyWithOwnOwnerTag",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowCreateTagsOnlyDuringInstanceLaunch",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:CreateAction": "RunInstances",
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowLifecycleOnlyForOwnInstances",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:StartInstances",
+        "ec2:StopInstances",
+        "ec2:RebootInstances",
+        "ec2:TerminateInstances"
+      ],
+      "Resource": "arn:aws:ec2:*:*:instance/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
+    },
+    {
+      "Sid": "AllowNameTagUpdatesOnlyForOwnEC2Resources",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags",
+        "ec2:DeleteTags"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:instance/*",
+        "arn:aws:ec2:*:*:volume/*",
+        "arn:aws:ec2:*:*:snapshot/*",
+        "arn:aws:ec2:*:*:security-group/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowCreateVolumeOnlyWithOwnOwnerTag",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVolume"
+      ],
+      "Resource": "arn:aws:ec2:*:*:volume/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowCreateTagsOnlyDuringVolumeCreation",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags"
+      ],
+      "Resource": "arn:aws:ec2:*:*:volume/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:CreateAction": "CreateVolume",
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowManageOwnVolumes",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DeleteVolume",
+        "ec2:ModifyVolume",
+        "ec2:CreateSnapshot"
+      ],
+      "Resource": "arn:aws:ec2:*:*:volume/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
+    },
+    {
+      "Sid": "AllowAttachDetachOwnVolumes",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AttachVolume",
+        "ec2:DetachVolume"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
+    },
+    {
+      "Sid": "AllowCreateSnapshotsWithOwnOwnerTag",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateSnapshot"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
+    },
+    {
+      "Sid": "AllowKeyPairManagement",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateKeyPair",
+        "ec2:DeleteKeyPair",
+        "ec2:DescribeKeyPairs",
+        "ec2:ImportKeyPair"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowCreateOwnSecurityGroups",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateSecurityGroup"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowCreateTagsOnlyDuringSecurityGroupCreation",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags"
+      ],
+      "Resource": "arn:aws:ec2:*:*:security-group/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:CreateAction": "CreateSecurityGroup",
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowManageOwnSecurityGroups",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DeleteSecurityGroup",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupEgress"
+      ],
+      "Resource": "arn:aws:ec2:*:*:security-group/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
+    },
+    {
+      "Sid": "BillingReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "aws-portal:ViewBilling",
+        "aws-portal:ViewUsage",
+        "ce:GetCostAndUsage",
+        "ce:GetCostForecast",
+        "ce:GetDimensionValues",
+        "ce:GetTags"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3ListBucketsAndLocations",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:GetBucketLocation"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3CreateOwnBucketsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::banglab-${aws:PrincipalTag/Owner}-*"
+      ]
+    },
+    {
+      "Sid": "S3ManageOwnBucketsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteBucket",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:PutEncryptionConfiguration",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutBucketVersioning",
+        "s3:GetBucketVersioning",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:GetBucketPublicAccessBlock"
+      ],
+      "Resource": [
+        "arn:aws:s3:::banglab-${aws:PrincipalTag/Owner}-*"
+      ]
+    },
+    {
+      "Sid": "S3ManageObjectsInOwnBucketsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:GetObjectTagging",
+        "s3:PutObjectTagging",
+        "s3:DeleteObjectTagging"
+      ],
+      "Resource": [
+        "arn:aws:s3:::banglab-${aws:PrincipalTag/Owner}-*/*"
+      ]
+    }
+  ]
 }
