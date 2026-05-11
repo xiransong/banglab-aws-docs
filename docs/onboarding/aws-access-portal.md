@@ -35,6 +35,9 @@ Once password and MFA are set up:
 
 1. Log in to the AWS access portal:  
    [https://banglab-udem-mila.awsapps.com/start](https://banglab-udem-mila.awsapps.com/start)
+
+![AWS access portal](../assets/images/aws-access-portal.png)
+
 2. You will see your **AWS account**
 3. Click the **EC2-GPU-Operator** permission set
 

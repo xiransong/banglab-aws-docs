@@ -21,6 +21,10 @@ It owns things like:
 - service quotas (e.g. vCPU limits)
 - billing and credits
 
+In BangLab, one AWS account may contain resources from multiple researchers.
+The account is the container, but individual resources still need clear
+researcher ownership.
+
 ---
 
 ### AWS User
@@ -39,7 +43,7 @@ _A person who is allowed to operate inside one or more accounts._
 
 ---
 
-### The Key Difference (Very Important)
+### The Key Difference
 
 Accounts and users are **not the same thing**.
 
@@ -48,6 +52,24 @@ Accounts and users are **not the same thing**.
 
 This separation is intentional and is what allows labs and organizations
 to manage shared infrastructure safely.
+
+---
+
+### Resource Ownership Inside Shared Accounts (Very Important)
+
+Because multiple researchers may work in the same AWS account, BangLab assigns
+each user an `Owner` value. This value is based on the
+user's full-name-style username, for example `xiransong`, `alicezhang`, or
+`bobchen`.
+
+The `EC2-GPU-Operator` permission set (see below) uses this owner value to separate
+resources:
+
+- EC2 instances, EBS volumes, and security groups use an `Owner=<username>` tag
+- S3 buckets use the naming pattern `banglab-<username>-*`
+
+This means two users can work in the same AWS account while still being
+restricted to their own resources.
 
 ---
 
@@ -60,10 +82,6 @@ A **permission set** defines:
 - what actions a user is allowed to perform
 - which services they can use
 - what they are *not* allowed to do
-
-You can think of it as: 
-
-_What is this user allowed to do inside this account?_
 
 ---
 
@@ -100,8 +118,9 @@ Currently, BangLab currently provides:
 
 - **EC2-GPU-Operator** 
 
-    - Launch, stop, and terminate GPU EC2 instances  
-    - Access S3 storage  
+    - Launch, stop, and terminate your own GPU EC2 instances  
+    - Manage your own EBS volumes and security groups
+    - Access your own S3 storage  
     - View limited billing and usage information  
 
 If something is blocked or unavailable in the console, it is usually
@@ -113,7 +132,10 @@ because it is outside the scope of the permission set.
 
 BangLab uses **Single Sign-On (SSO)** login to manage access: 
 
-- you log in through the **AWS access portal**
+- you log in to the **AWS access portal**:
+
+![AWS access portal](../assets/images/aws-access-portal.png)
+
 - you select an account and a permission set
 - AWS grants you temporary access automatically
 
@@ -129,7 +151,9 @@ After logging in via the access portal and selecting:
 - an AWS account, and
 - a permission set (e.g. `EC2-GPU-Operator`),
 
-you are redirected to the **AWS Management Console**.
+you are redirected to the **AWS Management Console**:
+
+![AWS Management Console](../assets/images/aws-console.png)
 
 The AWS Management Console (often called the **AWS console**) is:
 
@@ -152,4 +176,5 @@ with a different set of allowed actions.
 - **AWS accounts** hold resources and billing
 - **Users** represent real people
 - **Permission sets** define what a user can do in an account
+- **Owner values** separate researcher resources inside shared accounts
 - You access AWS through an **SSO login**, not personal AWS accounts

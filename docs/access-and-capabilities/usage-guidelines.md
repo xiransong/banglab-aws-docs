@@ -12,6 +12,10 @@ The following guidelines help:
 
 ## EC2 Usage
 
+- **Tag every EC2 resource with your owner value**  
+  Instances, EBS volumes, and security groups must use
+  `Owner=<username>`, for example `Owner=xiransong`.
+
 - **Terminate instances when you are done**  
   Running instances consume budget and quota.
 
@@ -23,15 +27,32 @@ The following guidelines help:
 
 ---
 
-## Tagging (Optional but recommended)
+## Owner Tagging
 
-Even though each lab member has a **separate AWS account**,
-tagging EC2 instances is still recommended.
+Some AWS accounts are shared by multiple lab members. Owner tags are required
+so users can manage their own resources without affecting someone else's work.
 
-Tags help you:
+Use your full-name-style BangLab username consistently:
 
-- distinguish different projects or experiments,
-- understand where costs come from within your account.
+```text
+Owner=xiransong
+Name=xiransong-gpu-dev
+```
+
+Recommended `Name` tag pattern:
+
+```text
+Name=<username>-<purpose>
+```
+
+Examples:
+
+```text
+Name=xiransong-cpu-test
+Name=xiransong-gpu-dev
+Name=xiransong-persistent-ebs
+Name=xiransong-ssh
+```
 
 ---
 
@@ -43,9 +64,17 @@ Tags help you:
 
 ## S3 Usage
 
+- Name S3 buckets using the required `banglab-<username>-*` pattern
 - Use S3 for **datasets and experiment outputs**, not scratch space
 - Avoid high-frequency, small-file updates
 - Clean up unused buckets and data when no longer needed
+
+Examples:
+
+```text
+banglab-xiransong-data
+banglab-xiransong-scratch
+```
 
 ---
 

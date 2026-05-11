@@ -16,6 +16,7 @@ nav:
       - S3 Basics: concepts/s3-basics.md
   - Access & Capabilities:
       - Overview: access-and-capabilities/index.md
+      - Resource Ownership Rules: access-and-capabilities/resource-ownership.md
       - EC2-GPU-Operator: access-and-capabilities/ec2-gpu-operator.md
       - Usage Guidelines: access-and-capabilities/usage-guidelines.md
   - Onboarding:
