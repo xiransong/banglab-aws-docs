@@ -15,6 +15,22 @@ Key characteristics:
 - objects live inside **buckets**,
 - “Folders” are just **name prefixes**
 
+In BangLab, personal S3 buckets should be named:
+
+```text
+banglab-<username>-*
+```
+
+For example, `xiransong` can use buckets such as:
+
+```text
+banglab-xiransong-data
+banglab-xiransong-scratch
+```
+
+This naming pattern controls which buckets you can access in shared AWS
+accounts.
+
 ---
 
 ## What S3 Is *Not*
@@ -32,4 +48,3 @@ Because of this, S3 is **not suitable for**:
 - frequent small writes,
 - line-by-line logging,
 - scratch space during training.
-

@@ -15,6 +15,11 @@ We primarily use:
 Before following the tutorials in this section, make sure you have:
 
 - completed the **Onboarding** process
+- know your BangLab username
+
+The examples use this username as the `Owner` tag for EC2 instances, EBS
+volumes, and security groups. Resources without the correct `Owner` tag may not
+be manageable by you.
 
 ---
 

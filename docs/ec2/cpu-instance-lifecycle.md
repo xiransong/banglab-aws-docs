@@ -29,6 +29,13 @@ Make sure you have:
 aws sso login --profile <your-profile-name>
 ```
 
+Set your BangLab username for the examples below. Replace `xiransong` with
+your own full-name-style username:
+
+```bash
+OWNER=xiransong
+```
+
 ---
 
 ## Phase 0 — Create a Key Pair (One-Time Setup)
@@ -41,16 +48,16 @@ to AWS.
 Generate a key pair (Press Enter to select the default values.):
 
 ```bash
-ssh-keygen -t ed25519 -f ~/.ssh/banglab
+ssh-keygen -t ed25519 -f ~/.ssh/${OWNER}
 ```
 
-Upload the public key to AWS (choose a key name, e.g. banglab-key):
+Upload the public key to AWS:
 
 ```bash
 aws ec2 import-key-pair \
   --region us-east-1 \
-  --key-name banglab-key \
-  --public-key-material fileb://~/.ssh/banglab.pub
+  --key-name ${OWNER}-key \
+  --public-key-material fileb://$HOME/.ssh/${OWNER}.pub
 ```
 
 You will reuse this key pair for future instances.
@@ -120,8 +127,9 @@ Create a security group:
 ```bash
 aws ec2 create-security-group \
   --region us-east-1 \
-  --group-name banglab-ssh \
-  --description "SSH access from my IP"
+  --group-name ${OWNER}-ssh \
+  --description "SSH access for ${OWNER}" \
+  --tag-specifications "ResourceType=security-group,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-ssh}]"
 ```
 
 Allow SSH from your IP:
@@ -131,7 +139,7 @@ MY_IP=$(curl -s https://checkip.amazonaws.com)
 
 aws ec2 authorize-security-group-ingress \
   --region us-east-1 \
-  --group-name banglab-ssh \
+  --group-name ${OWNER}-ssh \
   --protocol tcp \
   --port 22 \
   --cidr ${MY_IP}/32
@@ -163,8 +171,8 @@ aws ec2 run-instances \
   --region us-east-1 \
   --image-id ${AMI_ID} \
   --instance-type t3.small \
-  --key-name banglab-key \
-  --security-groups banglab-ssh \
+  --key-name ${OWNER}-key \
+  --security-groups ${OWNER}-ssh \
   --block-device-mappings '[
     {
       "DeviceName": "/dev/sda1",
@@ -175,7 +183,9 @@ aws ec2 run-instances \
       }
     }
   ]' \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=cpu-test}]'
+  --tag-specifications \
+    "ResourceType=instance,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-cpu-test}]" \
+    "ResourceType=volume,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-cpu-test-root}]"
 ```
 
 ### Notes
@@ -187,8 +197,9 @@ aws ec2 run-instances \
 
 * **Tags**
 
-    * `Value=cpu-test` helps identify the instance in the console
-    * Tags are labels for organization and cost visibility
+    * `Owner=${OWNER}` is required so you can manage the instance and root EBS volume
+    * `Name=${OWNER}-cpu-test` helps identify the instance in the console
+    * If the `Owner` tag is missing or wrong, you may need an administrator to fix it
 
 * **CLI output**
 
@@ -217,7 +228,7 @@ aws ec2 run-instances \
 Once the instance is `running`, connect via SSH (remember to copy and paste the IP address):
 
 ```bash
-ssh -i ~/.ssh/banglab ubuntu@<PUBLIC_IP>
+ssh -i ~/.ssh/${OWNER} ubuntu@<PUBLIC_IP>
 ```
 
 Run a sanity check:

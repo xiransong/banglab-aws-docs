@@ -20,6 +20,20 @@ Key characteristics:
 - objects live inside **buckets**,
 - “Folders” are just **name prefixes**
 
+In BangLab shared AWS accounts, S3 bucket access is based on the bucket name.
+Create personal buckets using:
+
+```text
+banglab-<username>-*
+```
+
+For example:
+
+```text
+banglab-xiransong-data
+banglab-xiransong-scratch
+```
+
 ---
 
 ## What S3 Is *Not*

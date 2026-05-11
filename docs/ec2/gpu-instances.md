@@ -19,6 +19,9 @@ Compared to CPU instances, GPU instances differ mainly in:
 The overall workflow (key pair, AMI, security group, SSH, lifecycle)
 is the same.
 
+The same ownership rule also applies: the GPU instance and its root EBS volume
+must be tagged with `Owner=<username>`.
+
 ---
 
 ## Instance Type
@@ -59,15 +62,17 @@ In the AWS console:
 Launching a GPU instance is identical to launching a CPU instance,
 except for the instance type.
 
-Example (replace `<AMI_ID>` and `<GPU_INSTANCE_TYPE>`):
+Example (replace `xiransong`, `<AMI_ID>`, and `<GPU_INSTANCE_TYPE>`):
 
 ```bash
+OWNER=xiransong
+
 aws ec2 run-instances \
   --region us-east-1 \
   --image-id <AMI_ID> \
   --instance-type <GPU_INSTANCE_TYPE> \
-  --key-name banglab-key \
-  --security-groups banglab-ssh \
+  --key-name ${OWNER}-key \
+  --security-groups ${OWNER}-ssh \
   --block-device-mappings '[
     {
       "DeviceName": "/dev/sda1",
@@ -78,8 +83,14 @@ aws ec2 run-instances \
       }
     }
   ]' \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=gpu-test}]'
+  --tag-specifications \
+    "ResourceType=instance,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-gpu-dev}]" \
+    "ResourceType=volume,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-gpu-dev-root}]"
 ```
+
+The key pair and security group should already exist from the CPU lifecycle
+tutorial. If you create new ones, use the same owner-scoped naming pattern and
+required `Owner` tag.
 
 ---
 

@@ -16,6 +16,10 @@ A simple mental model:
 
 Inside the instance, EBS behaves like a normal Linux disk.
 
+In BangLab shared AWS accounts, EBS volumes are owner-protected. User-created
+volumes must have an `Owner=<username>` tag, and you can manage only volumes
+whose `Owner` tag matches your username.
+
 ---
 
 ## What Happens to EBS Data
@@ -46,12 +50,14 @@ EBS is configured when launching an instance using
 Example:
 
 ```bash
+OWNER=xiransong
+
 aws ec2 run-instances \
   --region us-east-1 \
   --image-id ${AMI_ID} \
   --instance-type t3.small \
-  --key-name banglab-key \
-  --security-groups banglab-ssh \
+  --key-name ${OWNER}-key \
+  --security-groups ${OWNER}-ssh \
   --block-device-mappings '[
     {
       "DeviceName": "/dev/sda1",
@@ -62,7 +68,9 @@ aws ec2 run-instances \
       }
     }
   ]' \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=cpu-test}]'
+  --tag-specifications \
+    "ResourceType=instance,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-cpu-test}]" \
+    "ResourceType=volume,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-cpu-test-root}]"
 ```
 
 Only the storage-related fields are explained below.
@@ -107,6 +115,31 @@ Behavior:
 * `false` → disk is preserved after termination
 
 For temporary experiments, keep this as `true`.
+
+---
+
+## Persistent EBS Volumes
+
+Sometimes you may want an EBS volume that survives independently of an EC2
+instance. Create persistent volumes with both `Owner` and `Name` tags:
+
+```bash
+OWNER=xiransong
+
+aws ec2 create-volume \
+  --region us-east-1 \
+  --availability-zone us-east-1a \
+  --size 200 \
+  --volume-type gp3 \
+  --tag-specifications "ResourceType=volume,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-persistent-ebs}]"
+```
+
+The volume must be in the same availability zone as the EC2 instance you want
+to attach it to.
+
+Only the owner can attach, detach, modify, snapshot, or delete the volume. If a
+volume is created without the correct `Owner` tag, ask an administrator to fix
+the tag.
 
 ---
 

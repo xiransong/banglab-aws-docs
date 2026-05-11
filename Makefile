@@ -36,6 +36,14 @@ build: ## Build the static site into ./site
 	}
 	$(MKDOCS) build
 
+build-strict: ## Build the static site with warnings treated as errors
+	@command -v $(MKDOCS) >/dev/null 2>&1 || { \
+		echo "MkDocs was not found in PATH."; \
+		echo "If you use pyenv, try: make MKDOCS=$$HOME/.pyenv/shims/mkdocs build-strict"; \
+		exit 1; \
+	}
+	$(MKDOCS) build --strict
+
 dist: ## Build the site and package it as a shareable zip file
 	@command -v zip >/dev/null 2>&1 || { \
 		echo "'zip' was not found in PATH."; \

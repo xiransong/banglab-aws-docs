@@ -12,6 +12,9 @@ The same CLI commands work on:
 - your local laptop,
 - EC2 instances.
 
+If you open a new terminal or SSH session, set the `OWNER` and `BUCKET`
+variables again before running the examples.
+
 ---
 
 ## Prerequisites
@@ -25,6 +28,14 @@ All examples assume:
 
 - region: `us-east-1`.
 
+Set your BangLab username and bucket name for the examples below. Replace
+`xiransong` with your own full-name-style username:
+
+```bash
+OWNER=xiransong
+BUCKET=banglab-${OWNER}-data
+```
+
 ---
 
 ## Step 1 — Create a Bucket (Browser, One-Time)
@@ -37,10 +48,22 @@ Buckets are typically created **once**, using the AWS console.
 2. Choose **Region**: `us-east-1`
 3. Go to **S3**
 4. Click **Create bucket**
-5. Choose a **globally unique bucket name**, for example: `<your name>-scratch`
-6. It is recommend to enable Bucket Versioning
-6. Leave other settings at their default values
-7. Click **Create bucket**
+5. Choose a **globally unique bucket name** using the required pattern:
+   `banglab-<username>-*`
+6. For example: `banglab-xiransong-data` or `banglab-xiransong-scratch`
+7. It is recommended to enable Bucket Versioning
+8. Leave other settings at their default values
+9. Click **Create bucket**
+
+With the `EC2-GPU-Operator` permission set, you can manage only S3 buckets
+whose names start with `banglab-<your username>-`.
+
+You can also create the bucket with the AWS CLI:
+
+```bash
+aws s3 mb s3://${BUCKET} \
+  --region us-east-1
+```
 
 ---
 
@@ -57,7 +80,7 @@ aws s3 ls
 ### Upload a File (Laptop → S3)
 
 ```bash
-aws s3 cp local_file.txt s3://your-bucket-name/path-you-defined/
+aws s3 cp local_file.txt s3://${BUCKET}/path-you-defined/
 ```
 
 You can upload files to any path in a bucket; S3 will create the path automatically since directories are logical prefixes, not real folders.
@@ -65,19 +88,19 @@ You can upload files to any path in a bucket; S3 will create the path automatica
 ### Upload a Directory (Recursive)
 
 ```bash
-aws s3 cp local_folder/ s3://your-bucket-name/local_folder/ --recursive
+aws s3 cp local_folder/ s3://${BUCKET}/local_folder/ --recursive
 ```
 
 ### Download a File (S3 → Laptop)
 
 ```bash
-aws s3 cp s3://your-bucket-name/local_file.txt .
+aws s3 cp s3://${BUCKET}/local_file.txt .
 ```
 
 ### Sync a Directory
 
 ```bash
-aws s3 sync local_folder/ s3://your-bucket-name/local_folder/
+aws s3 sync local_folder/ s3://${BUCKET}/local_folder/
 ```
 
 `sync` is useful when:
@@ -127,13 +150,13 @@ If this works, the instance has access to S3.
 ### Download Data (S3 → EC2)
 
 ```bash
-aws s3 sync s3://your-bucket-name/datasets/ ~/datasets/
+aws s3 sync s3://${BUCKET}/datasets/ ~/datasets/
 ```
 
 ### Upload Results (EC2 → S3)
 
 ```bash
-aws s3 sync ~/experiments/ s3://your-bucket-name/experiments/
+aws s3 sync ~/experiments/ s3://${BUCKET}/experiments/
 ```
 
 This pattern is commonly used to:
@@ -153,3 +176,24 @@ A common and safe workflow is:
 4. Download data elsewhere when needed
 
 Avoid writing to S3 at very high frequency during training.
+
+---
+
+## Migrating an Older Personal Bucket
+
+Older personal buckets should be migrated to the `banglab-<username>-*` naming
+pattern.
+
+Example:
+
+```bash
+OWNER=xiransong
+OLD_BUCKET=xiransong
+NEW_BUCKET=banglab-${OWNER}-data
+
+aws s3 sync s3://${OLD_BUCKET} s3://${NEW_BUCKET} --copy-props none
+```
+
+After verifying the copied data, clean up the old bucket when it is no longer
+needed. If the old bucket is no longer accessible under the current permission
+set, ask an administrator for help with the migration.
