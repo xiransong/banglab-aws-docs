@@ -75,7 +75,8 @@
         "arn:aws:ec2:*:*:instance/*",
         "arn:aws:ec2:*:*:volume/*",
         "arn:aws:ec2:*:*:snapshot/*",
-        "arn:aws:ec2:*:*:security-group/*"
+        "arn:aws:ec2:*:*:security-group/*",
+        "arn:aws:ec2:*:*:key-pair/*"
       ],
       "Condition": {
         "StringEquals": {
@@ -170,15 +171,68 @@
       }
     },
     {
-      "Sid": "AllowKeyPairManagement",
+      "Sid": "AllowDescribeKeyPairs",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeKeyPairs"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowCreateKeyPairsOnlyWithOwnOwnerTag",
       "Effect": "Allow",
       "Action": [
         "ec2:CreateKeyPair",
-        "ec2:DeleteKeyPair",
-        "ec2:DescribeKeyPairs",
         "ec2:ImportKeyPair"
       ],
-      "Resource": "*"
+      "Resource": "arn:aws:ec2:*:*:key-pair/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowCreateTagsOnlyDuringKeyPairCreation",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags"
+      ],
+      "Resource": "arn:aws:ec2:*:*:key-pair/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:CreateAction": [
+            "CreateKeyPair",
+            "ImportKeyPair"
+          ],
+          "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Owner",
+            "Name"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AllowDeleteOwnKeyPairs",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DeleteKeyPair"
+      ],
+      "Resource": "arn:aws:ec2:*:*:key-pair/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
     },
     {
       "Sid": "AllowCreateOwnSecurityGroups",
