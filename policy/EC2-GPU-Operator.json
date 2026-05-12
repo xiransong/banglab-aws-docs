@@ -10,12 +10,15 @@
       "Resource": "*"
     },
     {
-      "Sid": "AllowRunInstancesOnlyWithOwnOwnerTag",
+      "Sid": "AllowRunInstancesCreateOnlyWithOwnOwnerTag",
       "Effect": "Allow",
       "Action": [
         "ec2:RunInstances"
       ],
-      "Resource": "*",
+      "Resource": [
+        "arn:aws:ec2:*:*:instance/*",
+        "arn:aws:ec2:*:*:volume/*"
+      ],
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
@@ -29,12 +32,43 @@
       }
     },
     {
+      "Sid": "AllowRunInstancesWithOwnKeyPairAndSecurityGroup",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:key-pair/*",
+        "arn:aws:ec2:*:*:security-group/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Owner": "${aws:PrincipalTag/Owner}"
+        }
+      }
+    },
+    {
+      "Sid": "AllowRunInstancesWithLaunchDependencies",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*::image/*",
+        "arn:aws:ec2:*:*:subnet/*",
+        "arn:aws:ec2:*:*:network-interface/*"
+      ]
+    },
+    {
       "Sid": "AllowCreateTagsOnlyDuringInstanceLaunch",
       "Effect": "Allow",
       "Action": [
         "ec2:CreateTags"
       ],
-      "Resource": "*",
+      "Resource": [
+        "arn:aws:ec2:*:*:instance/*",
+        "arn:aws:ec2:*:*:volume/*"
+      ],
       "Condition": {
         "StringEquals": {
           "ec2:CreateAction": "RunInstances",
