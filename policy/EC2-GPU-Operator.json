@@ -240,7 +240,7 @@
       "Action": [
         "ec2:CreateSecurityGroup"
       ],
-      "Resource": "*",
+      "Resource": "arn:aws:ec2:*:*:security-group/*",
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/Owner": "${aws:PrincipalTag/Owner}"
@@ -252,6 +252,14 @@
           ]
         }
       }
+    },
+    {
+      "Sid": "AllowUseVpcsForSecurityGroupCreation",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateSecurityGroup"
+      ],
+      "Resource": "arn:aws:ec2:*:*:vpc/*"
     },
     {
       "Sid": "AllowCreateTagsOnlyDuringSecurityGroupCreation",
