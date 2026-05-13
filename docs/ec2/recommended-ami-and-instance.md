@@ -2,6 +2,9 @@
 
 This guide helps lab members choose the recommended AMI and EC2 instance type. This guide focuses on **On-Demand EC2 instances**. 
 
+For practical launch commands, use the instance recipes in
+[`banglab-aws-tools`](https://github.com/xiransong/banglab-aws-tools).
+
 ## Recommended AMI
 
 We recommend using the following AMI for both GPU instances and x86 CPU instances:
@@ -33,7 +36,10 @@ For simplicity and compatibility with most ML/Docker research workflows, we reco
 
 ## Recommended CPU instances
 
-For most CPU-based development, start with `m7i-flex.2xlarge`.
+For light CPU-based development, start with `m7i-flex.xlarge`. Move to
+`m7i-flex.2xlarge` or larger when your workflow needs more CPU or memory.
+
+`banglab-aws-tools` includes a starter recipe for `m7i-flex.xlarge`.
 
 | Category                               | Recommended instance | vCPUs |     RAM (GiB) | When to use                                                                                        |
 | -------------------------------------- | -------------------: | ----: | ------: | -------------------------------------------------------------------------------------------------- |
@@ -55,6 +61,8 @@ For more CPU instance options, see:
 ## Recommended GPU instances
 
 GPU instances should be used only when actual GPU computation is needed, such as model training, GPU inference, rendering, or CUDA-based experiments.
+
+`banglab-aws-tools` includes a starter recipe for `g4dn.xlarge`.
 
 | GPU | instance | vCPUs | CPU RAM (GiB)  | GPU RAM (GB) |
 |---|---:|---:|---:|---:|

@@ -12,13 +12,15 @@ alicezhang
 bobchen
 ```
 
-**Important: Please use this same username consistently in EC2 tags, EBS tags, security group tags, and S3 bucket names.**
+**Important: Please use this same username consistently in EC2 tags, EBS tags,
+security group tags, EC2 key pair tags, and S3 bucket names.**
 
 ---
 
 ## Required Owner Tag
 
-EC2 instances, EBS volumes, and security groups must be tagged with:
+EC2 instances, EBS volumes, security groups, and EC2 key pairs must be tagged
+with:
 
 ```text
 Owner=<username>
@@ -94,6 +96,19 @@ Name=<username>-ssh
 
 This keeps SSH firewall rules separate when several researchers use the same
 AWS account.
+
+---
+
+## EC2 Key Pairs
+
+EC2 key pairs should also be username-scoped and tagged at creation time:
+
+```text
+Owner=<username>
+Name=<username>-key
+```
+
+The private key stays on your laptop. AWS receives only the public key.
 
 ---
 

@@ -1,10 +1,13 @@
 # GPU Instances
 
-This page explains how launching a **GPU EC2 instance** differs from
-launching a CPU instance.
+GPU instances are EC2 instances with attached GPUs. They are useful for model
+training, GPU inference, rendering, and CUDA-based experiments.
 
-If you have completed the CPU instance lifecycle tutorial,
-this page should feel very familiar.
+The day-to-day launch workflow is handled by:
+
+[banglab-aws-tools](https://github.com/xiransong/banglab-aws-tools)
+
+Use this page to understand what changes when you choose a GPU instance.
 
 ---
 
@@ -12,125 +15,66 @@ this page should feel very familiar.
 
 Compared to CPU instances, GPU instances differ mainly in:
 
-- **Instance type** (GPU-enabled families)
-- **vCPU quota requirement** (e.g. quota for Running On-Demand G and VT instances)
-- **Cost**
+- **instance type**: use GPU families such as `g4dn`, `g6`, or `g6e`
+- **quota**: GPU instances require quota under `Running On-Demand G and VT instances`
+- **cost**: GPU instances cost more per hour than CPU development instances
+- **drivers**: use a Deep Learning AMI when you want CUDA/NVIDIA tooling ready
 
-The overall workflow (key pair, AMI, security group, SSH, lifecycle)
-is the same.
-
-The same ownership rule also applies: the GPU instance and its root EBS volume
-must be tagged with `Owner=<username>`.
+The ownership rule is the same: the instance and its root EBS volume must use
+`Owner=<username>`.
 
 ---
 
-## Instance Type
+## Recommended Starting Point
 
-To use GPUs, you must choose a **GPU-enabled instance type**.
+For a first GPU instance, start small:
 
-Which instance types are available depends on:
-
-- your AWS region (we use `us-east-1`),
-- your approved vCPU quota.
-
-Refer to the official AWS documentation for supported GPU instances:
-[https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html](https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html)
-
-You can start with the cost-effective T4 GPU instances (e.g., g4dn.xlarge): 
-[https://aws.amazon.com/cn/ec2/instance-types/g4/](https://aws.amazon.com/cn/ec2/instance-types/g4/)
-
----
-
-## vCPU Quota
-
-GPU instances require non-zero vCPU quotas.
-
-If you don't have vCPU quotas yet, ask an administrator for quota increase. 
-
----
-
-## Launching a GPU Instance
-
-[Deep Learning Base AMI with Single CUDA](https://docs.aws.amazon.com/dlami/latest/devguide/aws-deep-learning-x86-base-with-single-cuda-ami-ubuntu-22-04.html)
-is the recommended AMI, which can also be used to run a CPU instance. 
-
-In the AWS console:
-
-* Go to **EC2 → AMIs**
-* Search for the AMI you want to use and copy the AMI ID
-
-Launching a GPU instance is identical to launching a CPU instance,
-except for the instance type.
-
-Example (replace `xiransong`, `<AMI_ID>`, and `<GPU_INSTANCE_TYPE>`):
-
-```bash
-OWNER=xiransong
-
-aws ec2 run-instances \
-  --region us-east-1 \
-  --image-id <AMI_ID> \
-  --instance-type <GPU_INSTANCE_TYPE> \
-  --key-name ${OWNER}-key \
-  --security-groups ${OWNER}-ssh \
-  --block-device-mappings '[
-    {
-      "DeviceName": "/dev/sda1",
-      "Ebs": {
-        "VolumeSize": 100,
-        "VolumeType": "gp3",
-        "DeleteOnTermination": true
-      }
-    }
-  ]' \
-  --tag-specifications \
-    "ResourceType=instance,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-gpu-dev}]" \
-    "ResourceType=volume,Tags=[{Key=Owner,Value=${OWNER}},{Key=Name,Value=${OWNER}-gpu-dev-root}]"
+```text
+Instance type: g4dn.xlarge
+GPU: 1 x NVIDIA T4
+GPU memory: 16 GB
 ```
 
-The key pair and security group should already exist from the CPU lifecycle
-tutorial. If you create new ones, use the same owner-scoped naming pattern and
-required `Owner` tag.
+For the recommended AMI and a broader instance table, see:
+
+[Recommended AMI and EC2 Instance Types](recommended-ami-and-instance.md)
 
 ---
 
-## Instance Price Calculation
+## Launch Workflow
 
-Before launching a GPU instance, it is strongly recommended to
-**check the hourly price** using the AWS Pricing Calculator.
+Use the GPU recipe in `banglab-aws-tools`:
 
-AWS provides an official pricing tool for this purpose:
+```bash
+make launch-instance INSTANCE_NAME=gpu INSTANCE_CONFIG=instances/g4dn-xlarge.env
+make configure-ssh INSTANCE_NAME=gpu
+ssh ec2
+```
+
+The toolbox applies the required `Owner` and `Name` tags to the instance and
+root EBS volume, and reuses your owner-tagged key pair and security group.
+
+---
+
+## Quota Awareness
+
+If launch fails with a quota error, ask a lab administrator to request a quota
+increase for:
+
+```text
+Running On-Demand G and VT instances
+```
+
+EC2 quotas are counted in vCPUs. For example, `g4dn.xlarge` uses 4 vCPUs.
+
+---
+
+## Cost Awareness
+
+Before launching larger GPU instances, estimate the hourly cost using the AWS
+Pricing Calculator:
+
 [https://calculator.aws](https://calculator.aws)
 
----
-
-### How to Estimate GPU Instance Cost
-
-Follow these steps in the browser:
-
-1. Open **AWS Pricing Calculator**
-2. Click **Create estimate**
-3. Choose **Region**: `us-east-1`
-
-4. Click **Find service** → select **Amazon EC2**
-5. Click **Configure**
-6. Search for the instance type you plan to use
-   (for example: `g6e.2xlarge`)
-7. Keep all other options at their default values
-8. Check the **On-Demand hourly cost**
-
-This gives you a reliable estimate of the **per-hour price**
-for the instance type.
-
----
-
-### Notes
-
-* Prices vary significantly between instance types
-* GPU instances are billed **per second** while running
-* Stopped instances do not incur compute charges
-* Storage (EBS) is billed separately
-
-You do not need to memorize prices.
-The goal is simply to be **aware of the cost scale**
-before launching an instance.
+GPU instances are billed while running. Stop or terminate idle instances, and
+remember that EBS storage can continue to cost money after an instance stops.

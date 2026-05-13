@@ -1,33 +1,38 @@
-# EC2 Tutorials
+# EC2 Guidance
 
-This section shows how to use **EC2 instances** in BangLab
-for research workflows.
+This section explains how BangLab uses **EC2 instances** for research
+workflows.
 
-We primarily use:
+The practical command workflow lives in the companion toolbox:
 
-- the **AWS CLI** to launch and manage instances,
-- the **AWS console** to monitor status and usage.
+[banglab-aws-tools](https://github.com/xiransong/banglab-aws-tools)
+
+Use this docs site for concepts, recommended choices, and policy expectations.
+Use the tools repo for repeatable commands.
 
 ---
 
-## Prerequisites
+## Recommended Workflow
 
-Before following the tutorials in this section, make sure you have:
+For most lab members:
 
-- completed the **Onboarding** process
-- know your BangLab username
-
-The examples use this username as the `Owner` tag for EC2 instances, EBS
-volumes, and security groups. Resources without the correct `Owner` tag may not
-be manageable by you.
+1. Complete onboarding in this docs site.
+2. Read the resource ownership rules.
+3. Review the recommended AMI and instance types.
+4. Use `banglab-aws-tools` for:
+   - local AWS CLI setup
+   - SSH key pair and security group setup
+   - EC2 launch, status, stop, start, reboot, and terminate
+   - persistent EBS create, attach, setup, and mount
 
 ---
 
 ## What This Section Covers
 
-This section includes:
+- [Recommended AMI and EC2 Instance Types](recommended-ami-and-instance.md)
+- [EC2 Workflow Toolbox](cpu-instance-lifecycle.md)
+- [EBS Basics](ebs-basics.md)
+- [GPU Instances](gpu-instances.md)
 
-- a complete step-by-step lifecycle of a **CPU EC2 instance**, and
-- a brief guidance on launching **GPU EC2 instances**.
-
-Follow the pages in order if this is your first time using EC2.
+The older raw AWS CLI examples have been retired from this section. The
+toolbox is easier to follow and applies the required BangLab tags consistently.

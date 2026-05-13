@@ -1,4 +1,4 @@
-# BangLab AWS Compute & Storage Guide
+# BangLab AWS Guide
 
 Welcome! This site documents how **BangLab** uses AWS to support research workloads, 
 with a focus on **GPU compute (EC2)** and **object storage (S3)**.
@@ -8,6 +8,8 @@ It is a **lab-specific guide** describing:
 
 - what resources are available to you, and 
 - how to use AWS safely and efficiently in our research environment.
+
+This tutorial uses a practical toolbox for AWS workflows: [`banglab-aws-tools`](https://github.com/xiransong/banglab-aws-tools)
 
 ---
 
@@ -36,8 +38,10 @@ If this is your first time using AWS in the lab, **follow this order**:
 3. **Onboarding**  
    Set up login, MFA, and the AWS CLI correctly.
 
-4. **EC2 Tutorials**  
-   Launch and manage EC2 instances.
+4. **EC2 Guidance**
+   Learn the EC2 model, recommended AMIs and instance types, and then use
+   [`banglab-aws-tools`](https://github.com/xiransong/banglab-aws-tools) for
+   day-to-day instance and EBS workflows.
 
 5. **S3 Tutorials**  
    Store and manage data.

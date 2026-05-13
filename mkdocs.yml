@@ -1,4 +1,4 @@
-site_name: BangLab AWS EC2 Guide
+site_name: BangLab AWS Guide
 
 extra:
   version: v0.1.0
@@ -26,7 +26,8 @@ nav:
       - vCPU Quota: onboarding/vcpu-quota.md
   - EC2:
       - Overview: ec2/index.md
-      - CPU Instance Lifecycle: ec2/cpu-instance-lifecycle.md
+      - Recommended AMI and Instance Types: ec2/recommended-ami-and-instance.md
+      - EC2 Workflow Toolbox: ec2/cpu-instance-lifecycle.md
       - EBS Basics: ec2/ebs-basics.md
       - GPU Instances: ec2/gpu-instances.md
   - S3:

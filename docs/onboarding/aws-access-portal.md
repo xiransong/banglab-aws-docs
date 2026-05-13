@@ -52,6 +52,8 @@ You will then be redirected to the **AWS Management Console**:
 The AWS console is a **general-purpose web interface**
 for managing AWS services.
 
+**Important:** Our lab is using the `us-east-1` region, please make sure the correct region is selected in the upper right corner of the window.
+
 By default, the console does **not** show all services prominently.
 The most important tool is the **search bar** at the top of the page.
 

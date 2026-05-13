@@ -65,7 +65,8 @@ user's full-name-style username, for example `xiransong`, `alicezhang`, or
 The `EC2-GPU-Operator` permission set (see below) uses this owner value to separate
 resources:
 
-- EC2 instances, EBS volumes, and security groups use an `Owner=<username>` tag
+- EC2 instances, EBS volumes, security groups, and EC2 key pairs use an
+  `Owner=<username>` tag
 - S3 buckets use the naming pattern `banglab-<username>-*`
 
 This means two users can work in the same AWS account while still being
@@ -114,12 +115,12 @@ As a researcher, you are not an administrator by default.
 Instead, you are given a permission set designed specifically for
 research workflows.
 
-Currently, BangLab currently provides:
+Currently, BangLab provides:
 
 - **EC2-GPU-Operator** 
 
     - Launch, stop, and terminate your own GPU EC2 instances  
-    - Manage your own EBS volumes and security groups
+    - Manage your own EBS volumes, security groups, and EC2 key pairs
     - Access your own S3 storage  
     - View limited billing and usage information  
 

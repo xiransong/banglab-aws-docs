@@ -1,4 +1,4 @@
-# BangLab AWS Compute & Storage Guide
+# BangLab AWS Guide
 
 This site documents how **BangLab** uses AWS to support research workloads
 

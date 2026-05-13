@@ -1,8 +1,12 @@
 # BangLab AWS Docs
 
-This repository contains the documentation site for **BangLab AWS usage**, including
-account access, onboarding steps, and practical guides for using AWS EC2 and S3
-within the lab.
+This repository contains the documentation site for **BangLab AWS usage**,
+including account access, onboarding steps, resource ownership rules, EC2
+concepts, and S3 guidance.
+
+For day-to-day EC2 and EBS commands, use the companion toolbox:
+
+[banglab-aws-tools](https://github.com/xiransong/banglab-aws-tools)
 
 ## Local Preview
 

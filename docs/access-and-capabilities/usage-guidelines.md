@@ -13,7 +13,7 @@ The following guidelines help:
 ## EC2 Usage
 
 - **Tag every EC2 resource with your owner value**  
-  Instances, EBS volumes, and security groups must use
+  Instances, EBS volumes, security groups, and EC2 key pairs must use
   `Owner=<username>`, for example `Owner=xiransong`.
 
 - **Terminate instances when you are done**  
@@ -52,6 +52,7 @@ Name=xiransong-cpu-test
 Name=xiransong-gpu-dev
 Name=xiransong-persistent-ebs
 Name=xiransong-ssh
+Name=xiransong-key
 ```
 
 ---

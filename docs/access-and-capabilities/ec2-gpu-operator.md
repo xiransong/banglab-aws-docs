@@ -50,7 +50,19 @@ This lets you manage SSH access without changing another user's firewall rules.
 
 ---
 
-### 4. Use S3 for Data Storage
+### 4. Manage Your EC2 Key Pairs
+
+You can:
+
+- create or import EC2 key pairs with your own `Owner` tag
+- use your own key pair when launching EC2 instances
+- delete your own key pairs
+
+This lets each researcher maintain separate SSH access credentials.
+
+---
+
+### 5. Use S3 for Data Storage
 
 You can:
 
@@ -64,7 +76,7 @@ This supports:
 
 ---
 
-### 5. View Cost and Usage Information
+### 6. View Cost and Usage Information
 
 You can:
 
@@ -83,8 +95,8 @@ This allows cost awareness without billing risk.
 
 ## Important Constraints to Be Aware Of
 
-- **Owner tags are required** for user-created EC2 instances, EBS volumes, and
-  security groups.
+- **Owner tags are required** for user-created EC2 instances, EBS volumes,
+  security groups, and EC2 key pairs.
 
 - **S3 buckets must use the `banglab-<username>-*` naming pattern**.
 
@@ -103,10 +115,11 @@ You can manage:
 - EC2 instances with `Owner=<your username>`
 - EBS volumes with `Owner=<your username>`
 - security groups with `Owner=<your username>`
+- EC2 key pairs with `Owner=<your username>`
 - S3 buckets named `banglab-<your username>-*`
 
-You cannot manage another user's EC2 instances, EBS volumes, security groups, or
-S3 buckets.
+You cannot manage another user's EC2 instances, EBS volumes, security groups,
+EC2 key pairs, or S3 buckets.
 
 If a resource is created without the correct `Owner` tag, you may not be able
 to manage it. Ask an administrator to add or correct the tag.
