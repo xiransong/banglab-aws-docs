@@ -23,7 +23,7 @@ You will receive an email titled:
 
 Click **“Accept Invitation”**, then:
 
-- use the username shown in the email,
+- **Important: use the username shown in the email**,
 - set your password,
 - configure MFA using your authenticator app.
 
