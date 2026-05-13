@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>GPU Instances - BangLab AWS EC2 Guide</title>
+    <title>GPU Instances - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -60,6 +63,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -80,7 +85,9 @@
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../ebs-basics/">EBS Basics</a>
                   </li>
@@ -88,19 +95,13 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#what-is-different-from-cpu-instances">What Is Different from CPU Instances?</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#instance-type">Instance Type</a>
+    <li class="toctree-l2"><a class="reference internal" href="#recommended-starting-point">Recommended Starting Point</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#vcpu-quota">vCPU Quota</a>
+    <li class="toctree-l2"><a class="reference internal" href="#launch-workflow">Launch Workflow</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#launching-a-gpu-instance">Launching a GPU Instance</a>
+    <li class="toctree-l2"><a class="reference internal" href="#quota-awareness">Quota Awareness</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#instance-price-calculation">Instance Price Calculation</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#how-to-estimate-gpu-instance-cost">How to Estimate GPU Instance Cost</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a>
-    </li>
-        </ul>
+    <li class="toctree-l2"><a class="reference internal" href="#cost-awareness">Cost Awareness</a>
     </li>
     </ul>
                   </li>
@@ -119,7 +120,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -137,94 +138,54 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="gpu-instances">GPU Instances</h1>
-<p>This page explains how launching a <strong>GPU EC2 instance</strong> differs from
-launching a CPU instance.</p>
-<p>If you have completed the CPU instance lifecycle tutorial,
-this page should feel very familiar.</p>
+<p>GPU instances are EC2 instances with attached GPUs. They are useful for model
+training, GPU inference, rendering, and CUDA-based experiments.</p>
+<p>The day-to-day launch workflow is handled by:</p>
+<p><a href="https://github.com/xiransong/banglab-aws-tools">banglab-aws-tools</a></p>
+<p>Use this page to understand what changes when you choose a GPU instance.</p>
 <hr />
 <h2 id="what-is-different-from-cpu-instances">What Is Different from CPU Instances?</h2>
 <p>Compared to CPU instances, GPU instances differ mainly in:</p>
 <ul>
-<li><strong>Instance type</strong> (GPU-enabled families)</li>
-<li><strong>vCPU quota requirement</strong></li>
-<li><strong>Cost</strong></li>
+<li><strong>instance type</strong>: use GPU families such as <code>g4dn</code>, <code>g6</code>, or <code>g6e</code></li>
+<li><strong>quota</strong>: GPU instances require quota under <code>Running On-Demand G and VT instances</code></li>
+<li><strong>cost</strong>: GPU instances cost more per hour than CPU development instances</li>
+<li><strong>drivers</strong>: use a Deep Learning AMI when you want CUDA/NVIDIA tooling ready</li>
 </ul>
-<p>The overall workflow (key pair, AMI, security group, SSH, lifecycle)
-is the same.</p>
+<p>The ownership rule is the same: the instance and its root EBS volume must use
+<code>Owner=&lt;username&gt;</code>.</p>
 <hr />
-<h2 id="instance-type">Instance Type</h2>
-<p>To use GPUs, you must choose a <strong>GPU-enabled instance type</strong>.</p>
-<p>Which instance types are available depends on:</p>
-<ul>
-<li>your AWS region (we use <code>us-east-1</code>),</li>
-<li>your approved vCPU quota.</li>
-</ul>
-<p>Refer to the official AWS documentation for supported GPU instances:
-https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html</p>
-<hr />
-<h2 id="vcpu-quota">vCPU Quota</h2>
-<p>GPU instances require non-zero vCPU quotas.</p>
-<p>If you don't have vCPU quotas yet, ask an administrator for quota increase. </p>
-<hr />
-<h2 id="launching-a-gpu-instance">Launching a GPU Instance</h2>
-<p>Launching a GPU instance is identical to launching a CPU instance,
-except for the instance type.</p>
-<p>Example (replace <code>&lt;GPU_INSTANCE_TYPE&gt;</code>):</p>
-<pre><code class="language-bash">aws ec2 run-instances \
-  --region us-east-1 \
-  --image-id ${AMI_ID} \
-  --instance-type &lt;GPU_INSTANCE_TYPE&gt; \
-  --key-name banglab-key \
-  --security-groups banglab-ssh \
-  --block-device-mappings '[
-    {
-      &quot;DeviceName&quot;: &quot;/dev/sda1&quot;,
-      &quot;Ebs&quot;: {
-        &quot;VolumeSize&quot;: 100,
-        &quot;VolumeType&quot;: &quot;gp3&quot;,
-        &quot;DeleteOnTermination&quot;: true
-      }
-    }
-  ]' \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=gpu-test}]'
+<h2 id="recommended-starting-point">Recommended Starting Point</h2>
+<p>For a first GPU instance, start small:</p>
+<pre><code class="language-text">Instance type: g4dn.xlarge
+GPU: 1 x NVIDIA T4
+GPU memory: 16 GB
 </code></pre>
+<p>For the recommended AMI and a broader instance table, see:</p>
+<p><a href="../recommended-ami-and-instance/">Recommended AMI and EC2 Instance Types</a></p>
 <hr />
-<h2 id="instance-price-calculation">Instance Price Calculation</h2>
-<p>Before launching a GPU instance, it is strongly recommended to
-<strong>check the hourly price</strong> using the AWS Pricing Calculator.</p>
-<p>AWS provides an official pricing tool for this purpose:
-<a href="https://calculator.aws">https://calculator.aws</a></p>
+<h2 id="launch-workflow">Launch Workflow</h2>
+<p>Use the GPU recipe in <code>banglab-aws-tools</code>:</p>
+<pre><code class="language-bash">make launch-instance INSTANCE_NAME=gpu INSTANCE_CONFIG=instances/g4dn-xlarge.env
+make configure-ssh INSTANCE_NAME=gpu
+ssh ec2
+</code></pre>
+<p>The toolbox applies the required <code>Owner</code> and <code>Name</code> tags to the instance and
+root EBS volume, and reuses your owner-tagged key pair and security group.</p>
 <hr />
-<h3 id="how-to-estimate-gpu-instance-cost">How to Estimate GPU Instance Cost</h3>
-<p>Follow these steps in the browser:</p>
-<ol>
-<li>Open <strong>AWS Pricing Calculator</strong></li>
-<li>Click <strong>Create estimate</strong></li>
-<li>
-<p>Choose <strong>Region</strong>: <code>us-east-1</code></p>
-</li>
-<li>
-<p>Click <strong>Find service</strong> → select <strong>Amazon EC2</strong></p>
-</li>
-<li>Click <strong>Configure</strong></li>
-<li>Search for the instance type you plan to use
-   (for example: <code>g6e.2xlarge</code>)</li>
-<li>Keep all other options at their default values</li>
-<li>Check the <strong>On-Demand hourly cost</strong></li>
-</ol>
-<p>This gives you a reliable estimate of the <strong>per-hour price</strong>
-for the instance type.</p>
+<h2 id="quota-awareness">Quota Awareness</h2>
+<p>If launch fails with a quota error, ask a lab administrator to request a quota
+increase for:</p>
+<pre><code class="language-text">Running On-Demand G and VT instances
+</code></pre>
+<p>EC2 quotas are counted in vCPUs. For example, <code>g4dn.xlarge</code> uses 4 vCPUs.</p>
 <hr />
-<h3 id="notes">Notes</h3>
-<ul>
-<li>Prices vary significantly between instance types</li>
-<li>GPU instances are billed <strong>per second</strong> while running</li>
-<li>Stopped instances do not incur compute charges</li>
-<li>Storage (EBS) is billed separately</li>
-</ul>
-<p>You do not need to memorize prices.
-The goal is simply to be <strong>aware of the cost scale</strong>
-before launching an instance.</p>
+<h2 id="cost-awareness">Cost Awareness</h2>
+<p>Before launching larger GPU instances, estimate the hourly cost using the AWS
+Pricing Calculator:</p>
+<p><a href="https://calculator.aws">https://calculator.aws</a></p>
+<p>GPU instances are billed while running. Stop or terminate idle instances, and
+remember that EBS storage can continue to cost money after an instance stops.</p>
               
             </div>
           </div><footer>

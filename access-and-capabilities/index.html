@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Overview - BangLab AWS EC2 Guide</title>
+    <title>Overview - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href=".." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href=".." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -62,9 +65,13 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#primary-permission-set">Primary Permission Set</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resource-ownership">Resource Ownership</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#shared-responsibility">Shared Responsibility</a>
     </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="resource-ownership/">Resource Ownership Rules</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
@@ -86,7 +93,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -107,7 +116,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="..">BangLab AWS EC2 Guide</a>
+          <a href="..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -133,11 +142,19 @@ that defines which actions are supported in a given AWS account.</p>
 <p>Most lab members are assigned the <strong>EC2-GPU-Operator</strong> permission set.</p>
 <p>This role enables:</p>
 <ul>
-<li>managing EC2 instances (including GPU instances),</li>
-<li>storing and managing data in S3,</li>
+<li>managing your own EC2 instances, including GPU instances,</li>
+<li>managing your own EBS volumes and security groups,</li>
+<li>storing and managing data in your own S3 buckets,</li>
 <li>viewing limited cost and usage information.</li>
 </ul>
 <p>Details are described on the next page.</p>
+<hr />
+<h2 id="resource-ownership">Resource Ownership</h2>
+<p>Some AWS member accounts are shared by multiple researchers. To keep resources
+separate inside a shared account, BangLab uses an <code>Owner</code> value for each user.</p>
+<p>EC2 instances, EBS volumes, and security groups are separated by <code>Owner</code> tags.
+S3 buckets are separated by bucket name.</p>
+<p>Read the resource ownership rules before creating resources.</p>
 <hr />
 <h2 id="shared-responsibility">Shared Responsibility</h2>
 <p>AWS resources are <strong>shared lab infrastructure</strong>.</p>
@@ -161,7 +178,7 @@ to follow a small set of <strong>usage guidelines</strong> that help:</p>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../concepts/s3-basics/" class="btn btn-neutral float-left" title="S3 Basics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="ec2-gpu-operator/" class="btn btn-neutral float-right" title="EC2-GPU-Operator">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="resource-ownership/" class="btn btn-neutral float-right" title="Resource Ownership Rules">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -187,7 +204,7 @@ to follow a small set of <strong>usage guidelines</strong> that help:</p>
       <span><a href="../concepts/s3-basics/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="ec2-gpu-operator/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="resource-ownership/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

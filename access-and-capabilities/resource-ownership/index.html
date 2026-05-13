@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>EC2-GPU-Operator - BangLab AWS Guide</title>
+    <title>Resource Ownership Rules - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "EC2-GPU-Operator";
-        var mkdocs_page_input_path = "access-and-capabilities/ec2-gpu-operator.md";
+        var mkdocs_page_name = "Resource Ownership Rules";
+        var mkdocs_page_input_path = "access-and-capabilities/resource-ownership.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -63,31 +63,25 @@
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../resource-ownership/">Resource Ownership Rules</a>
-                  </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">EC2-GPU-Operator</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Resource Ownership Rules</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#what-you-can-do">What You Can Do</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#1-manage-ec2-instances">1. Manage EC2 Instances</a>
+    <li class="toctree-l2"><a class="reference internal" href="#required-owner-tag">Required Owner Tag</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#2-manage-your-ebs-volumes">2. Manage Your EBS Volumes</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ec2-instances">EC2 Instances</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#3-manage-your-security-groups">3. Manage Your Security Groups</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ebs-volumes">EBS Volumes</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#4-manage-your-ec2-key-pairs">4. Manage Your EC2 Key Pairs</a>
+    <li class="toctree-l2"><a class="reference internal" href="#security-groups">Security Groups</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#5-use-s3-for-data-storage">5. Use S3 for Data Storage</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ec2-key-pairs">EC2 Key Pairs</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#6-view-cost-and-usage-information">6. View Cost and Usage Information</a>
+    <li class="toctree-l2"><a class="reference internal" href="#s3-buckets">S3 Buckets</a>
     </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#important-constraints-to-be-aware-of">Important Constraints to Be Aware Of</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#what-this-means-in-practice">What This Means in Practice</a>
+    <li class="toctree-l2"><a class="reference internal" href="#if-a-resource-is-mistagged">If a Resource Is Mistagged</a>
     </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../usage-guidelines/">Usage Guidelines</a>
                   </li>
@@ -138,7 +132,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Access & Capabilities</li>
-      <li class="breadcrumb-item active">EC2-GPU-Operator</li>
+      <li class="breadcrumb-item active">Resource Ownership Rules</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -147,117 +141,106 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="ec2-gpu-operator">EC2-GPU-Operator</h1>
-<p><strong>EC2-GPU-Operator</strong> is the primary permission set for BangLab researchers.
-It is designed to support <strong>GPU-based research workflows</strong>. </p>
-<p>This page describes <strong>what this role allows and does not allow</strong>.</p>
-<p>The permission set uses owner-based access control. In shared AWS accounts,
-you can manage only resources that match your BangLab username.</p>
+                <h1 id="resource-ownership-rules">Resource Ownership Rules</h1>
+<p>Some BangLab AWS member accounts are shared by multiple researchers.
+To prevent one user from accidentally changing another user's resources,
+BangLab uses owner-based resource isolation.</p>
+<p>Each researcher has a canonical username based on their full name, for example:</p>
+<pre><code class="language-text">xiransong
+alicezhang
+bobchen
+</code></pre>
+<p><strong>Important: Please use this same username consistently in EC2 tags, EBS tags,
+security group tags, EC2 key pair tags, and S3 bucket names.</strong></p>
 <hr />
-<h2 id="what-you-can-do">What You Can Do</h2>
-<h3 id="1-manage-ec2-instances">1. Manage EC2 Instances</h3>
-<p>You can:</p>
-<ul>
-<li>view EC2 resources and instance details</li>
-<li>launch new EC2 instances</li>
-<li>start, stop, reboot, and terminate EC2 instances whose <code>Owner</code> tag matches
-  your username</li>
-<li>use GPU instance types (subject to vCPU quota)</li>
-</ul>
-<p>This covers the full lifecycle needed for research experiments.</p>
+<h2 id="required-owner-tag">Required Owner Tag</h2>
+<p>EC2 instances, EBS volumes, security groups, and EC2 key pairs must be tagged
+with:</p>
+<pre><code class="language-text">Owner=&lt;username&gt;
+</code></pre>
+<p>For example:</p>
+<pre><code class="language-text">Owner=xiransong
+Name=xiransong-gpu-dev
+</code></pre>
+<p>The <code>Owner</code> tag controls who can manage the resource. The <code>Name</code> tag is a
+human-readable label that helps you identify the resource in the AWS console.</p>
 <hr />
-<h3 id="2-manage-your-ebs-volumes">2. Manage Your EBS Volumes</h3>
-<p>You can:</p>
-<ul>
-<li>create EBS volumes with your own <code>Owner</code> tag</li>
-<li>attach and detach your own EBS volumes</li>
-<li>modify, snapshot, and delete your own EBS volumes</li>
-</ul>
-<p>This supports persistent datasets, checkpoints, and experiment workspaces.</p>
+<h2 id="ec2-instances">EC2 Instances</h2>
+<p>When you launch an EC2 instance, include both tags:</p>
+<pre><code class="language-text">Owner=&lt;username&gt;
+Name=&lt;username&gt;-&lt;purpose&gt;
+</code></pre>
+<p>Examples:</p>
+<pre><code class="language-text">Owner=xiransong
+Name=xiransong-cpu-test
+</code></pre>
+<pre><code class="language-text">Owner=xiransong
+Name=xiransong-gpu-dev
+</code></pre>
+<p>With the <code>EC2-GPU-Operator</code> permission set, you can start, stop, reboot, and
+terminate only instances whose <code>Owner</code> tag matches your username.</p>
 <hr />
-<h3 id="3-manage-your-security-groups">3. Manage Your Security Groups</h3>
-<p>You can:</p>
-<ul>
-<li>create security groups with your own <code>Owner</code> tag</li>
-<li>edit inbound and outbound rules on your own security groups</li>
-<li>delete your own security groups</li>
-</ul>
-<p>This lets you manage SSH access without changing another user's firewall rules.</p>
+<h2 id="ebs-volumes">EBS Volumes</h2>
+<p>EBS volumes also need the same owner tag:</p>
+<pre><code class="language-text">Owner=&lt;username&gt;
+Name=&lt;username&gt;-&lt;purpose&gt;
+</code></pre>
+<p>For a persistent EBS volume, use a clear name such as:</p>
+<pre><code class="language-text">Owner=xiransong
+Name=xiransong-persistent-ebs
+</code></pre>
+<p>You can attach, detach, modify, snapshot, and delete only EBS volumes whose
+<code>Owner</code> tag matches your username.</p>
 <hr />
-<h3 id="4-manage-your-ec2-key-pairs">4. Manage Your EC2 Key Pairs</h3>
-<p>You can:</p>
-<ul>
-<li>create or import EC2 key pairs with your own <code>Owner</code> tag</li>
-<li>use your own key pair when launching EC2 instances</li>
-<li>delete your own key pairs</li>
-</ul>
-<p>This lets each researcher maintain separate SSH access credentials.</p>
+<h2 id="security-groups">Security Groups</h2>
+<p>Security groups should also be username-scoped and tagged at creation time:</p>
+<pre><code class="language-text">Owner=&lt;username&gt;
+Name=&lt;username&gt;-ssh
+</code></pre>
+<p>This keeps SSH firewall rules separate when several researchers use the same
+AWS account.</p>
 <hr />
-<h3 id="5-use-s3-for-data-storage">5. Use S3 for Data Storage</h3>
-<p>You can:</p>
-<ul>
-<li>create and delete S3 buckets named <code>banglab-&lt;username&gt;-*</code></li>
-<li>upload, download, and delete objects in your own buckets</li>
-</ul>
-<p>This supports:</p>
-<ul>
-<li>storing datasets and saving experiment outputs</li>
-<li>sharing artifacts across machines</li>
-</ul>
+<h2 id="ec2-key-pairs">EC2 Key Pairs</h2>
+<p>EC2 key pairs should also be username-scoped and tagged at creation time:</p>
+<pre><code class="language-text">Owner=&lt;username&gt;
+Name=&lt;username&gt;-key
+</code></pre>
+<p>The private key stays on your laptop. AWS receives only the public key.</p>
 <hr />
-<h3 id="6-view-cost-and-usage-information">6. View Cost and Usage Information</h3>
-<p>You can:</p>
-<ul>
-<li>view limited billing and usage information</li>
-<li>inspect cost breakdowns related to your usage</li>
-</ul>
-<p>You <strong>cannot</strong>:</p>
-<ul>
-<li>modify billing settings</li>
-<li>manage credits</li>
-<li>access organization-wide financial controls</li>
-</ul>
-<p>This allows cost awareness without billing risk.</p>
+<h2 id="s3-buckets">S3 Buckets</h2>
+<p>S3 bucket ownership is based on the bucket name. Create buckets using this
+pattern:</p>
+<pre><code class="language-text">banglab-&lt;username&gt;-*
+</code></pre>
+<p>Examples:</p>
+<pre><code class="language-text">banglab-xiransong-data
+banglab-xiransong-scratch
+banglab-alicezhang-data
+</code></pre>
+<p>With the <code>EC2-GPU-Operator</code> permission set, a user can access only buckets that
+match their own prefix. For example, <code>xiransong</code> can access:</p>
+<pre><code class="language-text">s3://banglab-xiransong-data
+</code></pre>
+<p>but not:</p>
+<pre><code class="language-text">s3://banglab-alicezhang-data
+</code></pre>
 <hr />
-<h2 id="important-constraints-to-be-aware-of">Important Constraints to Be Aware Of</h2>
-<ul>
-<li>
-<p><strong>Owner tags are required</strong> for user-created EC2 instances, EBS volumes,
-  security groups, and EC2 key pairs.</p>
-</li>
-<li>
-<p><strong>S3 buckets must use the <code>banglab-&lt;username&gt;-*</code> naming pattern</strong>.</p>
-</li>
-<li>
-<p><strong>vCPU quotas</strong> apply at the account level. A new account may initially have zero GPU vCPU quota. </p>
-</li>
-<li>
-<p><strong>Quota increases</strong> must be requested by an administrator.</p>
-</li>
-<li>
-<p><strong>Resource availability</strong> depends on region and capacity (we are primarily using us-east-1 region).</p>
-</li>
-</ul>
-<hr />
-<h2 id="what-this-means-in-practice">What This Means in Practice</h2>
-<p>You can manage:</p>
-<ul>
-<li>EC2 instances with <code>Owner=&lt;your username&gt;</code></li>
-<li>EBS volumes with <code>Owner=&lt;your username&gt;</code></li>
-<li>security groups with <code>Owner=&lt;your username&gt;</code></li>
-<li>EC2 key pairs with <code>Owner=&lt;your username&gt;</code></li>
-<li>S3 buckets named <code>banglab-&lt;your username&gt;-*</code></li>
-</ul>
-<p>You cannot manage another user's EC2 instances, EBS volumes, security groups,
-EC2 key pairs, or S3 buckets.</p>
-<p>If a resource is created without the correct <code>Owner</code> tag, you may not be able
-to manage it. Ask an administrator to add or correct the tag.</p>
+<h2 id="if-a-resource-is-mistagged">If a Resource Is Mistagged</h2>
+<p>If a resource is created without the correct <code>Owner</code> tag, the normal user may
+not be able to manage it. In that case, ask an administrator to add or correct
+the <code>Owner</code> tag.</p>
+<p>The intended rule is:</p>
+<pre><code class="language-text">Resource Owner tag == IAM Identity Center Owner attribute
+</code></pre>
+<p>For S3, the intended rule is:</p>
+<pre><code class="language-text">Bucket name starts with banglab-&lt;Owner&gt;-
+</code></pre>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../resource-ownership/" class="btn btn-neutral float-left" title="Resource Ownership Rules"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../usage-guidelines/" class="btn btn-neutral float-right" title="Usage Guidelines">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ec2-gpu-operator/" class="btn btn-neutral float-right" title="EC2-GPU-Operator">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -280,10 +263,10 @@ to manage it. Ask an administrator to add or correct the tag.</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../resource-ownership/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../usage-guidelines/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../ec2-gpu-operator/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>AWS CLI Setup - BangLab AWS EC2 Guide</title>
+    <title>AWS CLI Setup - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -60,6 +63,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -73,17 +78,7 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">AWS CLI Setup</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#what-you-need-before-starting">What You Need Before Starting</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#step-1-verify-aws-cli-installation">Step 1 — Verify AWS CLI Installation</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#step-2-configure-aws-cli-with-sso">Step 2 — Configure AWS CLI with SSO</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#step-3-authenticate">Step 3 — Authenticate</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#step-4-verify-cli-access">Step 4 — Verify CLI Access</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#common-notes">Common Notes</a>
+    <li class="toctree-l2"><a class="reference internal" href="#continue-in-banglab-aws-tools">Continue in banglab-aws-tools</a>
     </li>
     </ul>
                   </li>
@@ -94,7 +89,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -115,7 +112,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -133,106 +130,15 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="aws-cli-setup">AWS CLI Setup</h1>
-<p>This page explains how to <strong>set up and use the AWS CLI</strong>
-with BangLab’s <strong>SSO-based AWS access</strong>.</p>
-<p>The AWS CLI allows you to interact with AWS services (EC2, S3, etc.)
-from the command line and is required for most research workflows.</p>
-<hr />
-<h2 id="what-you-need-before-starting">What You Need Before Starting</h2>
-<p>Make sure you have already:</p>
-<ul>
-<li>completed password and MFA setup in the previous step,</li>
-<li>successfully logged in to the AWS access portal,</li>
-<li>installed the AWS CLI on your machine.</li>
-</ul>
-<hr />
-<h2 id="step-1-verify-aws-cli-installation">Step 1 — Verify AWS CLI Installation</h2>
-<p>Open a terminal and run:</p>
-<pre><code class="language-bash">aws --version
-</code></pre>
-<p>You should see output similar to:</p>
-<pre><code>aws-cli/2.x.x Python/3.x ...
-</code></pre>
-<p>If the command is not found, install <strong>AWS CLI v2</strong> before continuing.</p>
-<hr />
-<h2 id="step-2-configure-aws-cli-with-sso">Step 2 — Configure AWS CLI with SSO</h2>
-<p>BangLab uses <strong>SSO-based authentication</strong>.</p>
-<p>Run:</p>
-<pre><code class="language-bash">aws configure sso
-</code></pre>
-<p>You will be prompted for several values.</p>
-<p>Typical inputs look like:</p>
-<ul>
-<li>
-<p><strong>SSO start URL</strong>: <code>https://banglab-udem-mila.awsapps.com/start</code></p>
-</li>
-<li>
-<p><strong>SSO Region</strong>: <code>us-east-1</code></p>
-</li>
-<li>
-<p><strong>Account</strong>: Select your assigned AWS account</p>
-</li>
-<li>
-<p><strong>Role</strong>: Select <code>EC2-GPU-Operator</code></p>
-</li>
-<li>
-<p><strong>Profile name</strong>: choose a simple name, for example: <code>banglab</code></p>
-</li>
-</ul>
-<p>This profile name will be used in later AWS CLI commands.</p>
-<p>For other optional prompts, you can accept the defaults.</p>
-<p>The configuration will be stored in <code>~/.aws/config</code>.</p>
-<hr />
-<h2 id="step-3-authenticate">Step 3 — Authenticate</h2>
-<p>After configuration, the AWS CLI will prompt you to authenticate.</p>
-<p>Typically:</p>
-<ul>
-<li>a browser window will open automatically,</li>
-<li>you will log in using your AWS access portal credentials,</li>
-<li>you may be asked to complete MFA.</li>
-</ul>
-<p>Once authentication succeeds, the CLI session becomes active.</p>
-<hr />
-<h2 id="step-4-verify-cli-access">Step 4 — Verify CLI Access</h2>
-<p>After login, run:</p>
-<pre><code class="language-bash">aws sts get-caller-identity --profile banglab
-</code></pre>
-<p>You should see output similar to:</p>
-<pre><code class="language-json">{
-  &quot;Account&quot;: &quot;...&quot;,
-  &quot;Arn&quot;: &quot;arn:aws:sts::...:assumed-role/EC2-GPU-Operator/...&quot;
-}
-</code></pre>
-<p>This confirms that:</p>
-<ul>
-<li>the CLI is authenticated,</li>
-<li>SSO is working correctly,</li>
-<li>the correct role is assumed.</li>
-</ul>
-<hr />
-<h2 id="common-notes">Common Notes</h2>
-<ul>
-<li>
-<p>CLI credentials are <strong>temporary</strong> (8 hours for EC2-GPU-Operator).
-  You may need to re-authenticate periodically.</p>
-</li>
-<li>
-<p>You do <strong>not</strong> need to manage access keys.
-  SSO handles credential generation and rotation automatically.</p>
-</li>
-<li>
-<p>If authentication expires, simply run any AWS CLI command. 
-  and follow the login prompt again.</p>
-</li>
-</ul>
-<hr />
-<p>Once this step is complete, you are ready to use:</p>
-<ul>
-<li>EC2 from the command line,</li>
-<li>S3 for data transfer,</li>
-<li>automation scripts.</li>
-</ul>
-<p>Continue to the next page to handle <strong>vCPU quota requests</strong>, if needed.</p>
+<h2 id="continue-in-banglab-aws-tools">Continue in <code>banglab-aws-tools</code></h2>
+<p>After AWS Access Portal login works, follow these pages in the tools repo:</p>
+<ol>
+<li><a href="https://github.com/xiransong/banglab-aws-tools/blob/main/README.md"><code>README.md</code></a>, <a href="https://github.com/xiransong/banglab-aws-tools/tree/main/docs"><code>docs/README.md</code></a></li>
+<li><a href="https://github.com/xiransong/banglab-aws-tools/blob/main/docs/prerequisites.md"><code>docs/prerequisites.md</code></a></li>
+<li><a href="https://github.com/xiransong/banglab-aws-tools/blob/main/docs/local-machine-setup.md"><code>docs/local-machine-setup.md</code></a></li>
+</ol>
+<p>Once that setup succeeds, return here for conceptual AWS guidance, or continue
+in <code>banglab-aws-tools</code> for EC2 and persistent EBS workflows.</p>
               
             </div>
           </div><footer>

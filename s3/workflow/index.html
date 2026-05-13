@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>S3 Workflow - BangLab AWS EC2 Guide</title>
+    <title>S3 Workflow - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -60,6 +63,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -80,7 +85,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -129,6 +136,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#recommended-usage-pattern">Recommended Usage Pattern</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#migrating-an-older-personal-bucket">Migrating an Older Personal Bucket</a>
+    </li>
     </ul>
                   </li>
               </ul>
@@ -139,7 +148,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -168,6 +177,8 @@
 <li>your local laptop,</li>
 <li>EC2 instances.</li>
 </ul>
+<p>If you open a new terminal or SSH session, set the <code>OWNER</code> and <code>BUCKET</code>
+variables again before running the examples.</p>
 <hr />
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before starting, make sure you have:</p>
@@ -179,6 +190,11 @@
 <ul>
 <li>region: <code>us-east-1</code>.</li>
 </ul>
+<p>Set your BangLab username and bucket name for the examples below. Replace
+<code>xiransong</code> with your own full-name-style username:</p>
+<pre><code class="language-bash">OWNER=xiransong
+BUCKET=banglab-${OWNER}-data
+</code></pre>
 <hr />
 <h2 id="step-1-create-a-bucket-browser-one-time">Step 1 — Create a Bucket (Browser, One-Time)</h2>
 <p>Buckets are typically created <strong>once</strong>, using the AWS console.</p>
@@ -188,11 +204,19 @@
 <li>Choose <strong>Region</strong>: <code>us-east-1</code></li>
 <li>Go to <strong>S3</strong></li>
 <li>Click <strong>Create bucket</strong></li>
-<li>Choose a <strong>globally unique bucket name</strong>, for example: <code>&lt;your name&gt;-scratch</code></li>
-<li>It is recommend to enable Bucket Versioning</li>
+<li>Choose a <strong>globally unique bucket name</strong> using the required pattern:
+   <code>banglab-&lt;username&gt;-*</code></li>
+<li>For example: <code>banglab-xiransong-data</code> or <code>banglab-xiransong-scratch</code></li>
+<li>It is recommended to enable Bucket Versioning</li>
 <li>Leave other settings at their default values</li>
 <li>Click <strong>Create bucket</strong></li>
 </ol>
+<p>With the <code>EC2-GPU-Operator</code> permission set, you can manage only S3 buckets
+whose names start with <code>banglab-&lt;your username&gt;-</code>.</p>
+<p>You can also create the bucket with the AWS CLI:</p>
+<pre><code class="language-bash">aws s3 mb s3://${BUCKET} \
+  --region us-east-1
+</code></pre>
 <hr />
 <h2 id="step-2-transfer-data-between-laptop-and-s3">Step 2 — Transfer Data Between Laptop and S3</h2>
 <p>Day-to-day S3 usage is done via the <strong>AWS CLI</strong>.</p>
@@ -200,17 +224,17 @@
 <pre><code class="language-bash">aws s3 ls
 </code></pre>
 <h3 id="upload-a-file-laptop-s3">Upload a File (Laptop → S3)</h3>
-<pre><code class="language-bash">aws s3 cp local_file.txt s3://your-bucket-name/path-you-defined/
+<pre><code class="language-bash">aws s3 cp local_file.txt s3://${BUCKET}/path-you-defined/
 </code></pre>
 <p>You can upload files to any path in a bucket; S3 will create the path automatically since directories are logical prefixes, not real folders.</p>
 <h3 id="upload-a-directory-recursive">Upload a Directory (Recursive)</h3>
-<pre><code class="language-bash">aws s3 cp local_folder/ s3://your-bucket-name/local_folder/ --recursive
+<pre><code class="language-bash">aws s3 cp local_folder/ s3://${BUCKET}/local_folder/ --recursive
 </code></pre>
 <h3 id="download-a-file-s3-laptop">Download a File (S3 → Laptop)</h3>
-<pre><code class="language-bash">aws s3 cp s3://your-bucket-name/local_file.txt .
+<pre><code class="language-bash">aws s3 cp s3://${BUCKET}/local_file.txt .
 </code></pre>
 <h3 id="sync-a-directory">Sync a Directory</h3>
-<pre><code class="language-bash">aws s3 sync local_folder/ s3://your-bucket-name/local_folder/
+<pre><code class="language-bash">aws s3 sync local_folder/ s3://${BUCKET}/local_folder/
 </code></pre>
 <p><code>sync</code> is useful when:</p>
 <ul>
@@ -240,10 +264,10 @@ The <strong>same AWS CLI commands</strong> work on EC2 instances.</p>
 </code></pre>
 <p>If this works, the instance has access to S3.</p>
 <h3 id="download-data-s3-ec2">Download Data (S3 → EC2)</h3>
-<pre><code class="language-bash">aws s3 sync s3://your-bucket-name/datasets/ ~/datasets/
+<pre><code class="language-bash">aws s3 sync s3://${BUCKET}/datasets/ ~/datasets/
 </code></pre>
 <h3 id="upload-results-ec2-s3">Upload Results (EC2 → S3)</h3>
-<pre><code class="language-bash">aws s3 sync ~/experiments/ s3://your-bucket-name/experiments/
+<pre><code class="language-bash">aws s3 sync ~/experiments/ s3://${BUCKET}/experiments/
 </code></pre>
 <p>This pattern is commonly used to:</p>
 <ul>
@@ -260,6 +284,20 @@ The <strong>same AWS CLI commands</strong> work on EC2 instances.</p>
 <li>Download data elsewhere when needed</li>
 </ol>
 <p>Avoid writing to S3 at very high frequency during training.</p>
+<hr />
+<h2 id="migrating-an-older-personal-bucket">Migrating an Older Personal Bucket</h2>
+<p>Older personal buckets should be migrated to the <code>banglab-&lt;username&gt;-*</code> naming
+pattern.</p>
+<p>Example:</p>
+<pre><code class="language-bash">OWNER=xiransong
+OLD_BUCKET=xiransong
+NEW_BUCKET=banglab-${OWNER}-data
+
+aws s3 sync s3://${OLD_BUCKET} s3://${NEW_BUCKET} --copy-props none
+</code></pre>
+<p>After verifying the copied data, clean up the old bucket when it is no longer
+needed. If the old bucket is no longer accessible under the current permission
+set, ask an administrator for help with the migration.</p>
               
             </div>
           </div><footer>

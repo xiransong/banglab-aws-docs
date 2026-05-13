@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>EBS Basics - BangLab AWS EC2 Guide</title>
+    <title>EBS Basics - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -60,6 +63,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -80,25 +85,23 @@
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">EBS Basics</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#what-is-ebs">What Is EBS?</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#root-ebs-vs-persistent-ebs">Root EBS vs Persistent EBS</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#what-happens-to-ebs-data">What Happens to EBS Data</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#how-ebs-is-configured-at-launch">How EBS Is Configured at Launch</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#volumesize">VolumeSize</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ownership-rules">Ownership Rules</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#volumetype">VolumeType</a>
+    <li class="toctree-l2"><a class="reference internal" href="#practical-workflow">Practical Workflow</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#deleteontermination">DeleteOnTermination</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#recommended-usage-pattern">Recommended Usage Pattern</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ebs-and-s3">EBS and S3</a>
     </li>
     </ul>
                   </li>
@@ -119,7 +122,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -137,123 +140,99 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="ebs-basics">EBS Basics</h1>
-<p>This page explains how <strong>EBS storage</strong> relates to EC2 instances
-and what happens to your data during the instance lifecycle.</p>
+<p>This page explains how <strong>EBS storage</strong> relates to EC2 instances and what
+happens to your data during the instance lifecycle.</p>
+<p>For practical persistent EBS commands, use:</p>
+<p><a href="https://github.com/xiransong/banglab-aws-tools">banglab-aws-tools</a></p>
 <hr />
 <h2 id="what-is-ebs">What Is EBS?</h2>
 <p><strong>EBS (Elastic Block Store)</strong> provides disk storage for EC2 instances.</p>
 <p>A simple mental model:</p>
 <ul>
-<li><strong>EC2 instance</strong> = the machine (CPU / GPU / memory)</li>
+<li><strong>EC2 instance</strong> = the machine</li>
 <li><strong>EBS volume</strong> = the disk attached to that machine</li>
 </ul>
 <p>Inside the instance, EBS behaves like a normal Linux disk.</p>
 <hr />
+<h2 id="root-ebs-vs-persistent-ebs">Root EBS vs Persistent EBS</h2>
+<p>Every EC2 instance has a <strong>root EBS volume</strong>. It contains the operating system
+and files stored on the instance's normal filesystem.</p>
+<p>BangLab workflows may also use a separate <strong>persistent EBS volume</strong> mounted at:</p>
+<pre><code class="language-text">~/scratch
+</code></pre>
+<p>Recommended pattern:</p>
+<ul>
+<li>keep EC2 instances disposable</li>
+<li>store long-lived research state on persistent EBS at <code>~/scratch</code></li>
+<li>do not mount persistent EBS directly at <code>~/</code></li>
+</ul>
+<hr />
 <h2 id="what-happens-to-ebs-data">What Happens to EBS Data</h2>
 <ul>
+<li><strong>Stopping an instance</strong></li>
+<li>the instance is powered off</li>
+<li>root EBS data is preserved</li>
 <li>
-<p><strong>Stopping an instance</strong></p>
-<ul>
-<li>instance is powered off</li>
-<li>EBS data is <strong>preserved</strong></li>
-</ul>
+<p>compute billing stops, but EBS storage can still cost money</p>
 </li>
 <li>
 <p><strong>Starting an instance</strong></p>
-<ul>
-<li>the same EBS disk is reattached</li>
-<li>files are still there</li>
-</ul>
+</li>
+<li>the same root EBS volume is reattached</li>
+<li>files on the root volume are still there</li>
+<li>
+<p>the public IP address may change</p>
 </li>
 <li>
 <p><strong>Terminating an instance</strong></p>
-<ul>
-<li>instance is permanently deleted</li>
-<li>root EBS volume is <strong>deleted by default</strong></li>
-<li>data is lost and cannot be recovered</li>
-</ul>
 </li>
+<li>the instance is permanently deleted</li>
+<li>the root EBS volume is usually deleted</li>
+<li>data on the root volume is lost</li>
 </ul>
+<p>A separate persistent EBS volume survives instance termination unless it is
+explicitly deleted.</p>
 <hr />
-<h2 id="how-ebs-is-configured-at-launch">How EBS Is Configured at Launch</h2>
-<p>EBS is configured when launching an instance using
-<code>--block-device-mappings</code>.</p>
-<p>Example:</p>
-<pre><code class="language-bash">aws ec2 run-instances \
-  --region us-east-1 \
-  --image-id ${AMI_ID} \
-  --instance-type t3.small \
-  --key-name banglab-key \
-  --security-groups banglab-ssh \
-  --block-device-mappings '[
-    {
-      &quot;DeviceName&quot;: &quot;/dev/sda1&quot;,
-      &quot;Ebs&quot;: {
-        &quot;VolumeSize&quot;: 30,
-        &quot;VolumeType&quot;: &quot;gp3&quot;,
-        &quot;DeleteOnTermination&quot;: true
-      }
-    }
-  ]' \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=cpu-test}]'
+<h2 id="ownership-rules">Ownership Rules</h2>
+<p>In BangLab shared AWS accounts, EBS volumes are owner-protected.</p>
+<p>User-created volumes must have:</p>
+<pre><code class="language-text">Owner=&lt;username&gt;
+Name=&lt;volume name&gt;
 </code></pre>
-<p>Only the storage-related fields are explained below.</p>
+<p>With the <code>EC2-GPU-Operator</code> permission set, you can manage only volumes whose
+<code>Owner</code> tag matches your username.</p>
 <hr />
-<h3 id="volumesize"><code>VolumeSize</code></h3>
-<pre><code class="language-json">&quot;VolumeSize&quot;: 30
-</code></pre>
+<h2 id="practical-workflow">Practical Workflow</h2>
+<p>Use <code>banglab-aws-tools</code> for:</p>
 <ul>
-<li>Disk size in <strong>GB</strong></li>
-<li>Increase this for datasets, checkpoints, or large models</li>
-<li>This is the most common adjustment users make</li>
+<li>listing your volumes</li>
+<li>creating a persistent EBS volume</li>
+<li>attaching it to a running instance</li>
+<li>initializing a new scratch volume once</li>
+<li>mounting an existing scratch volume during daily work</li>
 </ul>
+<p>The toolbox docs explain how to avoid common mistakes, such as accidentally
+passing a root EBS volume ID when you meant to mount your persistent scratch
+volume.</p>
 <hr />
-<h3 id="volumetype"><code>VolumeType</code></h3>
-<pre><code class="language-json">&quot;VolumeType&quot;: &quot;gp3&quot;
-</code></pre>
-<ul>
-<li>General-purpose SSD</li>
-<li>Suitable for almost all research workloads</li>
-<li>Default and recommended</li>
-</ul>
-<hr />
-<h3 id="deleteontermination"><code>DeleteOnTermination</code></h3>
-<pre><code class="language-json">&quot;DeleteOnTermination&quot;: true
-</code></pre>
-<ul>
-<li>Controls whether the disk is deleted when the instance is terminated</li>
-</ul>
-<p>Behavior:</p>
-<ul>
-<li><code>true</code> → disk is deleted (default)</li>
-<li><code>false</code> → disk is preserved after termination</li>
-</ul>
-<p>For temporary experiments, keep this as <code>true</code>.</p>
-<hr />
-<h2 id="recommended-usage-pattern">Recommended Usage Pattern</h2>
-<ul>
-<li>
+<h2 id="ebs-and-s3">EBS and S3</h2>
 <p>Use <strong>EBS</strong> for:</p>
 <ul>
 <li>active experiments</li>
-<li>datasets in use</li>
+<li>datasets currently in use</li>
 <li>checkpoints and intermediate results</li>
 </ul>
-</li>
-<li>
 <p>Use <strong>S3</strong> for:</p>
 <ul>
 <li>backups</li>
 <li>long-term storage</li>
 <li>sharing data across machines</li>
 </ul>
-</li>
-</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../cpu-instance-lifecycle/" class="btn btn-neutral float-left" title="CPU Instance Lifecycle"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../cpu-instance-lifecycle/" class="btn btn-neutral float-left" title="EC2 Workflow Toolbox"><span class="icon icon-circle-arrow-left"></span> Previous</a>
         <a href="../gpu-instances/" class="btn btn-neutral float-right" title="GPU Instances">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 

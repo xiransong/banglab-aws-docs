@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>AWS Access Portal Login - BangLab AWS EC2 Guide</title>
+    <title>AWS Access Portal Login - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -59,6 +62,8 @@
               <p class="caption"><span class="caption-text">Access & Capabilities</span></p>
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
@@ -94,7 +99,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -115,7 +122,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -159,14 +166,19 @@ BangLab’s AWS access portal:</p>
 <ol>
 <li>Log in to the AWS access portal:<br />
 <a href="https://banglab-udem-mila.awsapps.com/start">https://banglab-udem-mila.awsapps.com/start</a></li>
+</ol>
+<p><img alt="AWS access portal" src="../../assets/images/aws-access-portal.png" /></p>
+<ol>
 <li>You will see your <strong>AWS account</strong></li>
 <li>Click the <strong>EC2-GPU-Operator</strong> permission set</li>
 </ol>
-<p>You will then be redirected to the <strong>AWS Management Console</strong>.</p>
+<p>You will then be redirected to the <strong>AWS Management Console</strong>: </p>
+<p><img alt="AWS Management Console after selecting the EC2-GPU-Operator permission set" src="../../assets/images/aws-console.png" /></p>
 <hr />
 <h2 id="step-3-using-the-aws-console">Step 3 - Using the AWS Console</h2>
 <p>The AWS console is a <strong>general-purpose web interface</strong>
 for managing AWS services.</p>
+<p><strong>Important:</strong> Our lab is using the <code>us-east-1</code> region, please make sure the correct region is selected in the upper right corner of the window.</p>
 <p>By default, the console does <strong>not</strong> show all services prominently.
 The most important tool is the <strong>search bar</strong> at the top of the page.</p>
 <h3 id="finding-services">Finding Services</h3>

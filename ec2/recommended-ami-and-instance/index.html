@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Recommended AMI and Instance Types - BangLab AWS Guide</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Recommended AMI and Instance Types";
+        var mkdocs_page_input_path = "ec2/recommended-ami-and-instance.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Concepts</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/accounts-and-access/">Accounts and Access</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/organization-and-billing/">Organization and Billing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/ec2-basics/">EC2 Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concepts/s3-basics/">S3 Basics</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Access & Capabilities</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Onboarding</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-access-portal/">AWS Access Portal Login</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/aws-cli-setup/">AWS CLI Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/vcpu-quota/">vCPU Quota</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">EC2</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Recommended AMI and Instance Types</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#recommended-ami">Recommended AMI</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#why-this-ami">Why this AMI?</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#important-do-not-use-this-ami-for-armgraviton-instances">Important: do not use this AMI for ARM/Graviton instances</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#recommended-cpu-instances">Recommended CPU instances</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#recommended-gpu-instances">Recommended GPU instances</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ec2-quota-requirements">EC2 quota requirements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cpu-instance-quota">CPU instance quota</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpu-instance-quota">GPU instance quota</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ebs-basics/">EBS Basics</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../gpu-instances/">GPU Instances</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">S3</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../s3/workflow/">S3 Workflow</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">BangLab AWS Guide</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">EC2</li>
+      <li class="breadcrumb-item active">Recommended AMI and Instance Types</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="recommended-ami-and-ec2-instance-types">Recommended AMI and EC2 Instance Types</h1>
+<p>This guide helps lab members choose the recommended AMI and EC2 instance type. This guide focuses on <strong>On-Demand EC2 instances</strong>. </p>
+<p>For practical launch commands, use the instance recipes in
+<a href="https://github.com/xiransong/banglab-aws-tools"><code>banglab-aws-tools</code></a>.</p>
+<h2 id="recommended-ami">Recommended AMI</h2>
+<p>We recommend using the following AMI for both GPU instances and x86 CPU instances:</p>
+<pre><code class="language-text">Deep Learning Base AMI with Single CUDA (Ubuntu 22.04) 20260130
+AMI ID: ami-0252d9c82e6b8fa85
+</code></pre>
+<h3 id="why-this-ami">Why this AMI?</h3>
+<p>This AMI provides a convenient Ubuntu 22.04 environment with common deep-learning system dependencies preinstalled, including CUDA, NVIDIA drivers, Docker-related tooling, AWS CLI, and other useful packages.</p>
+<p>Although this AMI is mainly intended for GPU instances, it can also be used on x86 CPU instances such as <code>m7i-flex</code>, <code>m7i</code>, <code>c7a</code>, and <code>r7i</code>.</p>
+<p>On CPU-only instances, GPU commands such as: <code>nvidia-smi</code> may fail or show no GPU device. This is expected because no GPU is attached.</p>
+<h3 id="important-do-not-use-this-ami-for-armgraviton-instances">Important: do not use this AMI for ARM/Graviton instances</h3>
+<p>This AMI is for x86_64 instances. Do not use it with ARM/Graviton instance families such as:</p>
+<pre><code class="language-text">t4g, m7g, m8g, c7g, r7g
+</code></pre>
+<p>For simplicity and compatibility with most ML/Docker research workflows, we recommend using x86 instances unless you specifically know that you need ARM64.</p>
+<hr />
+<h2 id="recommended-cpu-instances">Recommended CPU instances</h2>
+<p>For light CPU-based development, start with <code>m7i-flex.xlarge</code>. Move to
+<code>m7i-flex.2xlarge</code> or larger when your workflow needs more CPU or memory.</p>
+<p><code>banglab-aws-tools</code> includes a starter recipe for <code>m7i-flex.xlarge</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th style="text-align: right;">Recommended instance</th>
+<th style="text-align: right;">vCPUs</th>
+<th style="text-align: right;">RAM (GiB)</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Light CPU/dev instance</strong></td>
+<td style="text-align: right;"><code>m7i-flex.xlarge</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">16</td>
+<td>Light VSCode Remote, LaTeX writing, small scripts, quick repo debugging</td>
+</tr>
+<tr>
+<td><strong>Default CPU/dev instance</strong></td>
+<td style="text-align: right;"><code>m7i-flex.2xlarge</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">32</td>
+<td>Recommended default for repo development, Docker builds, LaTeX, small/medium preprocessing</td>
+</tr>
+<tr>
+<td><strong>Heavy all-purpose CPU/dev instance</strong></td>
+<td style="text-align: right;"><code>m7i-flex.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">64</td>
+<td>Larger Docker builds, heavier dataset processing, running several tools at once</td>
+</tr>
+<tr>
+<td><strong>Sustained CPU-heavy worker</strong></td>
+<td style="text-align: right;"><code>c7a.2xlarge</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16</td>
+<td>CPU-bound jobs where RAM is not the bottleneck; batch scripts, compression, parallel preprocessing</td>
+</tr>
+<tr>
+<td><strong>Larger sustained CPU-heavy worker</strong></td>
+<td style="text-align: right;"><code>c7a.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">32</td>
+<td>Longer CPU-heavy jobs; good when many cores matter more than memory</td>
+</tr>
+<tr>
+<td><strong>Predictable balanced worker</strong></td>
+<td style="text-align: right;"><code>m7i.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">64</td>
+<td>Sustained CPU jobs that also need decent RAM; safer than <code>m7i-flex</code> for long high-CPU runs</td>
+</tr>
+<tr>
+<td><strong>Memory-heavy preprocessing</strong></td>
+<td style="text-align: right;"><code>r7i.2xlarge</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">64</td>
+<td>Large NumPy arrays, dataset loading, preprocessing where RAM is the main bottleneck</td>
+</tr>
+<tr>
+<td><strong>Larger memory-heavy preprocessing</strong></td>
+<td style="text-align: right;"><code>r7i.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">128</td>
+<td>Large in-memory datasets, many preprocessing workers, memory-intensive pipelines</td>
+</tr>
+</tbody>
+</table>
+<p>For more CPU instance options, see:</p>
+<p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/cpu-options-supported-instances-values.html">https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/cpu-options-supported-instances-values.html</a></p>
+<hr />
+<h2 id="recommended-gpu-instances">Recommended GPU instances</h2>
+<p>GPU instances should be used only when actual GPU computation is needed, such as model training, GPU inference, rendering, or CUDA-based experiments.</p>
+<p><code>banglab-aws-tools</code> includes a starter recipe for <code>g4dn.xlarge</code>.</p>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th style="text-align: right;">instance</th>
+<th style="text-align: right;">vCPUs</th>
+<th style="text-align: right;">CPU RAM (GiB)</th>
+<th style="text-align: right;">GPU RAM (GB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 × NVIDIA T4</td>
+<td style="text-align: right;"><code>g4dn.xlarge</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr>
+<td>1 × NVIDIA T4</td>
+<td style="text-align: right;"><code>g4dn.2xlarge</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr>
+<td>1 × NVIDIA T4</td>
+<td style="text-align: right;"><code>g4dn.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr>
+<td>1 × NVIDIA L4</td>
+<td style="text-align: right;"><code>g6.xlarge</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr>
+<td>1 × NVIDIA L4</td>
+<td style="text-align: right;"><code>g6.2xlarge</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr>
+<td>1 × NVIDIA L4</td>
+<td style="text-align: right;"><code>g6.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr>
+<td>1 × NVIDIA L40S</td>
+<td style="text-align: right;"><code>g6e.xlarge</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr>
+<td>1 × NVIDIA L40S</td>
+<td style="text-align: right;"><code>g6e.2xlarge</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr>
+<td>1 × NVIDIA L40S</td>
+<td style="text-align: right;"><code>g6e.4xlarge</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">48</td>
+</tr>
+</tbody>
+</table>
+<p>For more GPU instance options, see:</p>
+<p><a href="https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html">https://docs.aws.amazon.com/dlami/latest/devguide/gpu.html</a></p>
+<hr />
+<h2 id="ec2-quota-requirements">EC2 quota requirements</h2>
+<p>EC2 quotas are counted in <strong>vCPUs</strong>, not just number of instances. For example, launching one <code>m7i-flex.2xlarge</code> uses 8 vCPUs.</p>
+<h3 id="cpu-instance-quota">CPU instance quota</h3>
+<p>To run the CPU instances listed above, your account needs quota under:</p>
+<pre><code class="language-text">Quota name: Running On-Demand Standard (A, C, D, H, I, M, R, T, Z) instances
+</code></pre>
+<p>For new lab accounts, the default value may be small, often around 5 vCPUs. This is enough for small instances, but not enough for many of the recommended development instances.</p>
+<p>If you see a quota error when launching a CPU instance, ask a lab administrator to request a quota increase for <code>Running On-Demand Standard (A, C, D, H, I, M, R, T, Z) instances</code>.</p>
+<h3 id="gpu-instance-quota">GPU instance quota</h3>
+<p>To run G-family GPU instances, your account needs quota under:</p>
+<pre><code class="language-text">Quota name: Running On-Demand G and VT instances
+</code></pre>
+<p>If you see a quota error when launching a GPU instance, ask a lab administrator to request a quota increase for <code>Running On-Demand G and VT instances</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../cpu-instance-lifecycle/" class="btn btn-neutral float-right" title="EC2 Workflow Toolbox">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../cpu-instance-lifecycle/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

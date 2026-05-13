@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Accounts and Access - BangLab AWS EC2 Guide</title>
+    <title>Accounts and Access - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -55,7 +58,9 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#aws-user">AWS User</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#the-key-difference-very-important">The Key Difference (Very Important)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#the-key-difference">The Key Difference</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#resource-ownership-inside-shared-accounts-very-important">Resource Ownership Inside Shared Accounts (Very Important)</a>
     </li>
         </ul>
     </li>
@@ -86,6 +91,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -106,7 +113,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -127,7 +136,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -160,6 +169,9 @@ It owns things like:</p>
 <li>service quotas (e.g. vCPU limits)</li>
 <li>billing and credits</li>
 </ul>
+<p>In BangLab, one AWS account may contain resources from multiple researchers.
+The account is the container, but individual resources still need clear
+researcher ownership.</p>
 <hr />
 <h3 id="aws-user">AWS User</h3>
 <p>An <strong>AWS user</strong> represents a <strong>real human</strong> (you).</p>
@@ -172,7 +184,7 @@ It owns things like:</p>
 <p>You can think of a user as: </p>
 <p><em>A person who is allowed to operate inside one or more accounts.</em></p>
 <hr />
-<h3 id="the-key-difference-very-important">The Key Difference (Very Important)</h3>
+<h3 id="the-key-difference">The Key Difference</h3>
 <p>Accounts and users are <strong>not the same thing</strong>.</p>
 <ul>
 <li>One <strong>AWS account</strong> can be accessed by <strong>many users</strong></li>
@@ -180,6 +192,21 @@ It owns things like:</p>
 </ul>
 <p>This separation is intentional and is what allows labs and organizations
 to manage shared infrastructure safely.</p>
+<hr />
+<h3 id="resource-ownership-inside-shared-accounts-very-important">Resource Ownership Inside Shared Accounts (Very Important)</h3>
+<p>Because multiple researchers may work in the same AWS account, BangLab assigns
+each user an <code>Owner</code> value. This value is based on the
+user's full-name-style username, for example <code>xiransong</code>, <code>alicezhang</code>, or
+<code>bobchen</code>.</p>
+<p>The <code>EC2-GPU-Operator</code> permission set (see below) uses this owner value to separate
+resources:</p>
+<ul>
+<li>EC2 instances, EBS volumes, security groups, and EC2 key pairs use an
+  <code>Owner=&lt;username&gt;</code> tag</li>
+<li>S3 buckets use the naming pattern <code>banglab-&lt;username&gt;-*</code></li>
+</ul>
+<p>This means two users can work in the same AWS account while still being
+restricted to their own resources.</p>
 <hr />
 <h2 id="2-permission-sets">2. Permission Sets</h2>
 <p>An AWS account and a user are connected by a <strong>permission set</strong>.</p>
@@ -189,8 +216,6 @@ to manage shared infrastructure safely.</p>
 <li>which services they can use</li>
 <li>what they are <em>not</em> allowed to do</li>
 </ul>
-<p>You can think of it as: </p>
-<p><em>What is this user allowed to do inside this account?</em></p>
 <hr />
 <h3 id="example">Example</h3>
 <ul>
@@ -213,13 +238,14 @@ to manage shared infrastructure safely.</p>
 <p>As a researcher, you are not an administrator by default.</p>
 <p>Instead, you are given a permission set designed specifically for
 research workflows.</p>
-<p>Currently, BangLab currently provides:</p>
+<p>Currently, BangLab provides:</p>
 <ul>
 <li>
 <p><strong>EC2-GPU-Operator</strong> </p>
 <ul>
-<li>Launch, stop, and terminate GPU EC2 instances  </li>
-<li>Access S3 storage  </li>
+<li>Launch, stop, and terminate your own GPU EC2 instances  </li>
+<li>Manage your own EBS volumes, security groups, and EC2 key pairs</li>
+<li>Access your own S3 storage  </li>
 <li>View limited billing and usage information  </li>
 </ul>
 </li>
@@ -230,7 +256,10 @@ because it is outside the scope of the permission set.</p>
 <h2 id="3-aws-access-portal">3. AWS Access Portal</h2>
 <p>BangLab uses <strong>Single Sign-On (SSO)</strong> login to manage access: </p>
 <ul>
-<li>you log in through the <strong>AWS access portal</strong></li>
+<li>you log in to the <strong>AWS access portal</strong>:</li>
+</ul>
+<p><img alt="AWS access portal" src="../../assets/images/aws-access-portal.png" /></p>
+<ul>
 <li>you select an account and a permission set</li>
 <li>AWS grants you temporary access automatically</li>
 </ul>
@@ -243,7 +272,8 @@ It is <strong>not</strong> where you manage AWS resources.</p>
 <li>an AWS account, and</li>
 <li>a permission set (e.g. <code>EC2-GPU-Operator</code>),</li>
 </ul>
-<p>you are redirected to the <strong>AWS Management Console</strong>.</p>
+<p>you are redirected to the <strong>AWS Management Console</strong>:</p>
+<p><img alt="AWS Management Console" src="../../assets/images/aws-console.png" /></p>
 <p>The AWS Management Console (often called the <strong>AWS console</strong>) is:</p>
 <ul>
 <li>the main web interface for AWS,</li>
@@ -263,6 +293,7 @@ with a different set of allowed actions.</p>
 <li><strong>AWS accounts</strong> hold resources and billing</li>
 <li><strong>Users</strong> represent real people</li>
 <li><strong>Permission sets</strong> define what a user can do in an account</li>
+<li><strong>Owner values</strong> separate researcher resources inside shared accounts</li>
 <li>You access AWS through an <strong>SSO login</strong>, not personal AWS accounts</li>
 </ul>
               

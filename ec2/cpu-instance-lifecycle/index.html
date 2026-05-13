@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>CPU Instance Lifecycle - BangLab AWS EC2 Guide</title>
+    <title>EC2 Workflow Toolbox - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "CPU Instance Lifecycle";
+        var mkdocs_page_name = "EC2 Workflow Toolbox";
         var mkdocs_page_input_path = "ec2/cpu-instance-lifecycle.md";
         var mkdocs_page_url = null;
       </script>
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -60,6 +63,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -80,53 +85,15 @@
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">EC2 Workflow Toolbox</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#before-you-start">Before You Start</a>
+    <li class="toctree-l2"><a class="reference internal" href="#supported-workflows">Supported Workflows</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#phase-0-create-a-key-pair-one-time-setup">Phase 0 — Create a Key Pair (One-Time Setup)</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser">Monitor in Browser</a>
+    <li class="toctree-l2"><a class="reference internal" href="#suggested-reading-order">Suggested Reading Order</a>
     </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#phase-1-choose-an-ami-ubuntu-2204">Phase 1 — Choose an AMI (Ubuntu 22.04)</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#using-the-cli">Using the CLI</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#using-the-browser">Using the Browser</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#phase-2-configure-security-group-ssh-access">Phase 2 — Configure Security Group (SSH Access)</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser_1">Monitor in Browser</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#phase-3-launch-a-cpu-ec2-instance">Phase 3 — Launch a CPU EC2 Instance</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser_2">Monitor in Browser</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#phase-4-ssh-into-the-instance">Phase 4 — SSH into the Instance</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#phase-5-stop-start-and-terminate">Phase 5 — Stop, Start, and Terminate</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#stop-the-instance">Stop the Instance</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#start-the-instance-again">Start the Instance Again</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#terminate-the-instance-final">Terminate the Instance (Final)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#monitor-in-browser_3">Monitor in Browser</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-and-aws-console">CLI and AWS Console</a>
     </li>
     </ul>
                   </li>
@@ -149,7 +116,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -157,7 +124,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">EC2</li>
-      <li class="breadcrumb-item active">CPU Instance Lifecycle</li>
+      <li class="breadcrumb-item active">EC2 Workflow Toolbox</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -166,261 +133,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="cpu-instance-lifecycle">CPU Instance Lifecycle</h1>
-<p>This tutorial walks through the <strong>complete lifecycle of a CPU EC2 instance</strong>,
-from creation to termination.</p>
-<p>We use a <strong>CPU instance</strong> as the first example because:</p>
-<ul>
-<li>it is cheaper,</li>
-<li>it behaves the same way as GPU instances,</li>
-<li>and it lets you learn the EC2 workflow safely.</li>
-</ul>
-<p>We primarily use the <strong>AWS CLI</strong> to execute actions, and the <strong>AWS console</strong>
-to monitor and verify state.</p>
+                <h1 id="ec2-workflow-toolbox">EC2 Workflow Toolbox</h1>
+<p>BangLab maintains a small command-line toolbox for EC2 and EBS research
+workflows:</p>
+<p><a href="https://github.com/xiransong/banglab-aws-tools">https://github.com/xiransong/banglab-aws-tools</a></p>
+<p>Use that repo for the practical steps. It wraps AWS CLI commands in stable
+<code>make</code> targets and applies the required BangLab ownership tags.</p>
 <hr />
-<h2 id="before-you-start">Before You Start</h2>
-<p>Make sure you have:</p>
+<h2 id="supported-workflows">Supported Workflows</h2>
+<p>The toolbox currently covers:</p>
 <ul>
-<li>
-<p>logged in to the AWS access portal: 
-  <a href="https://banglab-udem-mila.awsapps.com/start">https://banglab-udem-mila.awsapps.com/start</a></p>
-</li>
-<li>
-<p>selected your account, and chosen <strong>EC2-GPU-Operator</strong> to open the AWS console</p>
-</li>
-<li>
-<p>authenticated in your terminal using SSO:</p>
-</li>
-</ul>
-<pre><code class="language-bash">aws sso login --profile &lt;your-profile-name&gt;
-</code></pre>
-<hr />
-<h2 id="phase-0-create-a-key-pair-one-time-setup">Phase 0 — Create a Key Pair (One-Time Setup)</h2>
-<p>An EC2 key pair is used for <strong>SSH access from your device</strong>.</p>
-<p>We recommend creating an SSH key locally and uploading <strong>only the public key</strong>
-to AWS.</p>
-<p>Generate a key pair:</p>
-<pre><code class="language-bash">ssh-keygen -t ed25519 -f ~/.ssh/banglab
-</code></pre>
-<p>Upload the public key to AWS:</p>
-<pre><code class="language-bash">aws ec2 import-key-pair \
-  --region us-east-1 \
-  --key-name banglab-key \
-  --public-key-material fileb://~/.ssh/banglab.pub
-</code></pre>
-<p>You will reuse this key pair for future instances.</p>
-<h3 id="monitor-in-browser">Monitor in Browser</h3>
-<ul>
-<li>
-<p>EC2 → <strong>Key Pairs</strong></p>
-</li>
-<li>
-<p>Confirm <code>banglab-key</code> appears in the list</p>
-</li>
+<li>local AWS CLI SSO setup and identity verification</li>
+<li>SSH key pair and security group setup</li>
+<li>EC2 instance launch, status, stop, start, reboot, and terminate</li>
+<li>persistent EBS volume creation, attach, one-time setup, and daily mount</li>
+<li>GitHub SSH key and dotfile persistence on EBS</li>
+<li>micromamba installation on EBS</li>
 </ul>
 <hr />
-<h2 id="phase-1-choose-an-ami-ubuntu-2204">Phase 1 — Choose an AMI (Ubuntu 22.04)</h2>
-<p>An <strong>AMI (Amazon Machine Image)</strong> defines the operating system of the instance.</p>
-<p>We use <strong>Ubuntu 22.04 LTS</strong> as an example.</p>
-<h3 id="using-the-cli">Using the CLI</h3>
-<p>Find the latest Ubuntu 22.04 AMI:</p>
-<pre><code class="language-bash">aws ec2 describe-images \
-  --region us-east-1 \
-  --owners 099720109477 \
-  --filters &quot;Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*&quot; \
-  --query 'Images | sort_by(@, &amp;CreationDate)[-1].ImageId' \
-  --output text
-</code></pre>
-<p>Save the returned AMI ID (e.g. as an environment variable):</p>
-<pre><code class="language-bash">AMI_ID=ami-xxxxxxxx
-</code></pre>
-<h3 id="using-the-browser">Using the Browser</h3>
-<p>In the AWS console:</p>
-<ul>
-<li>Go to <strong>EC2 → AMIs</strong></li>
-<li>Search for “Ubuntu 22.04”</li>
-<li>
-<p>Prefer images:</p>
-<ul>
-<li>owned by <strong>Canonical</strong></li>
-<li>marked as <strong>64-bit (x86)</strong></li>
-<li>with recent creation dates</li>
-</ul>
-</li>
-</ul>
-<p>The CLI method above simply automates this selection.</p>
+<h2 id="suggested-reading-order">Suggested Reading Order</h2>
+<p>After finishing AWS Access Portal login in this docs site, continue in <a href="https://github.com/xiransong/banglab-aws-tools">banglab-aws-tools</a>:</p>
+<ol>
+<li><code>docs/prerequisites.md</code></li>
+<li><code>docs/local-machine-setup.md</code></li>
+<li><code>docs/ssh-access-setup.md</code></li>
+<li><code>docs/ec2-instance-lifecycle.md</code></li>
+<li><code>docs/persistent-ebs.md</code></li>
+</ol>
 <hr />
-<h2 id="phase-2-configure-security-group-ssh-access">Phase 2 — Configure Security Group (SSH Access)</h2>
-<p>A <strong>security group</strong> acts as a virtual firewall.</p>
-<p>We will allow:</p>
+<h2 id="cli-and-aws-console">CLI and AWS Console</h2>
+<p>The recommended pattern is:</p>
 <ul>
-<li>SSH (port 22)</li>
-<li><strong>only from your current public IP</strong></li>
+<li>use <code>banglab-aws-tools</code> commands for reproducible setup and lifecycle actions</li>
+<li>use the AWS Console to review status, inspect tags, copy public IP addresses,
+  and perform simple manual actions on resources you own</li>
 </ul>
-<p>Create a security group:</p>
-<pre><code class="language-bash">aws ec2 create-security-group \
-  --region us-east-1 \
-  --group-name banglab-ssh \
-  --description &quot;SSH access from my IP&quot;
-</code></pre>
-<p>Allow SSH from your IP:</p>
-<pre><code class="language-bash">MY_IP=$(curl -s https://checkip.amazonaws.com)
-
-aws ec2 authorize-security-group-ingress \
-  --region us-east-1 \
-  --group-name banglab-ssh \
-  --protocol tcp \
-  --port 22 \
-  --cidr ${MY_IP}/32
-</code></pre>
-<h3 id="monitor-in-browser_1">Monitor in Browser</h3>
-<ul>
-<li>
-<p>EC2 → <strong>Security Groups</strong></p>
-<ul>
-<li>Check inbound rule: TCP 22 from your IP</li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="phase-3-launch-a-cpu-ec2-instance">Phase 3 — Launch a CPU EC2 Instance</h2>
-<p>Now we launch the instance.</p>
-<p>We use <code>t3.small</code> as an example:</p>
-<ul>
-<li>requires <strong>2 vCPUs</strong></li>
-<li>suitable for lightweight testing</li>
-</ul>
-<p>If your account still has <strong>0 vCPU quota</strong>, this step will fail.
-Request a quota increase before continuing.</p>
-<p>Launch the instance:</p>
-<pre><code class="language-bash">aws ec2 run-instances \
-  --region us-east-1 \
-  --image-id ${AMI_ID} \
-  --instance-type t3.small \
-  --key-name banglab-key \
-  --security-groups banglab-ssh \
-  --block-device-mappings '[
-    {
-      &quot;DeviceName&quot;: &quot;/dev/sda1&quot;,
-      &quot;Ebs&quot;: {
-        &quot;VolumeSize&quot;: 30,
-        &quot;VolumeType&quot;: &quot;gp3&quot;,
-        &quot;DeleteOnTermination&quot;: true
-      }
-    }
-  ]' \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=cpu-test}]'
-</code></pre>
-<h3 id="notes">Notes</h3>
-<ul>
-<li>
-<p><strong>EBS (your disk) configuration</strong></p>
-<ul>
-<li>Sets a 30 GB root volume</li>
-<li>Data is deleted automatically when the instance is terminated</li>
-</ul>
-</li>
-<li>
-<p><strong>Tags</strong></p>
-<ul>
-<li><code>Value=cpu-test</code> helps identify the instance in the console</li>
-<li>Tags are labels for organization and cost visibility</li>
-</ul>
-</li>
-<li>
-<p><strong>CLI output</strong></p>
-<ul>
-<li>The command returns a large JSON response</li>
-<li>Press <code>q</code> to exit the pager</li>
-</ul>
-</li>
-</ul>
-<h3 id="monitor-in-browser_2">Monitor in Browser</h3>
-<ul>
-<li>EC2 → <strong>Instances</strong></li>
-<li>Watch state change: <code>pending</code> → <code>running</code></li>
-<li>
-<p>Check:</p>
-<ul>
-<li>Instance type</li>
-<li><strong>Instance ID</strong></li>
-<li><strong>Public IPv4 address</strong></li>
-<li>Tags</li>
-</ul>
-</li>
-</ul>
-<p>You will need instance ID and public IPv4 address. </p>
-<hr />
-<h2 id="phase-4-ssh-into-the-instance">Phase 4 — SSH into the Instance</h2>
-<p>Once the instance is <code>running</code>, connect via SSH:</p>
-<pre><code class="language-bash">ssh -i ~/.ssh/banglab ubuntu@&lt;PUBLIC_IP&gt;
-</code></pre>
-<p>Run a sanity check:</p>
-<pre><code class="language-bash">uname -a
-</code></pre>
-<p>If this works, the instance is ready for use.</p>
-<hr />
-<h2 id="phase-5-stop-start-and-terminate">Phase 5 — Stop, Start, and Terminate</h2>
-<p>Return to your <strong>local machine</strong> for lifecycle commands.</p>
-<h3 id="stop-the-instance">Stop the Instance</h3>
-<pre><code class="language-bash">aws ec2 stop-instances \
-  --region us-east-1 \
-  --instance-ids &lt;INSTANCE_ID&gt;
-</code></pre>
-<ul>
-<li>Instance is powered off</li>
-<li>Storage (EBS) is preserved</li>
-<li>Billing <strong>largely</strong> stops</li>
-</ul>
-<hr />
-<h3 id="start-the-instance-again">Start the Instance Again</h3>
-<pre><code class="language-bash">aws ec2 start-instances \
-  --region us-east-1 \
-  --instance-ids &lt;INSTANCE_ID&gt;
-</code></pre>
-<ul>
-<li>Instance resumes</li>
-<li>Public IP <strong>may change</strong></li>
-</ul>
-<hr />
-<h3 id="terminate-the-instance-final">Terminate the Instance (Final)</h3>
-<pre><code class="language-bash">aws ec2 terminate-instances \
-  --region us-east-1 \
-  --instance-ids &lt;INSTANCE_ID&gt;
-</code></pre>
-<ul>
-<li>Instance is permanently deleted</li>
-<li>Root disk data is lost</li>
-<li>This action <strong>cannot be undone</strong></li>
-</ul>
-<h3 id="monitor-in-browser_3">Monitor in Browser</h3>
-<ul>
-<li>EC2 → <strong>Instances</strong></li>
-<li>
-<p>Observe state transitions:</p>
-</li>
-<li>
-<p><code>running</code> → <code>shutting-down</code> → <code>terminated</code></p>
-</li>
-</ul>
-<hr />
-<h2 id="summary">Summary</h2>
-<p>In this tutorial, you learned how to:</p>
-<ul>
-<li>create and upload an SSH key pair,</li>
-<li>choose an Ubuntu 22.04 AMI,</li>
-<li>configure SSH access safely,</li>
-<li>launch a CPU EC2 instance with storage,</li>
-<li>connect via SSH,</li>
-<li>manage the full instance lifecycle.</li>
-</ul>
-<p>This workflow applies directly to <strong>GPU instances</strong>,
-with only minor changes.</p>
+<p>The Console is useful for checking what exists. The toolbox is the source of
+truth for the lab-supported command workflow.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../recommended-ami-and-instance/" class="btn btn-neutral float-left" title="Recommended AMI and Instance Types"><span class="icon icon-circle-arrow-left"></span> Previous</a>
         <a href="../ebs-basics/" class="btn btn-neutral float-right" title="EBS Basics">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
@@ -444,7 +198,7 @@ with only minor changes.</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../recommended-ami-and-instance/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
       <span><a href="../ebs-basics/" style="color: #fcfcfc">Next &raquo;</a></span>

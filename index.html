@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
       <link rel="shortcut icon" href="img/favicon.ico" />
-    <title>BangLab AWS EC2 Guide</title>
+    <title>BangLab AWS Guide</title>
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -66,6 +69,8 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="access-and-capabilities/">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="access-and-capabilities/resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="access-and-capabilities/ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="access-and-capabilities/usage-guidelines/">Usage Guidelines</a>
@@ -86,7 +91,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -107,7 +114,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href=".">BangLab AWS EC2 Guide</a>
+          <a href=".">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -123,7 +130,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="banglab-aws-compute-storage-guide">BangLab AWS Compute &amp; Storage Guide</h1>
+                <h1 id="banglab-aws-guide">BangLab AWS Guide</h1>
 <p>Welcome! This site documents how <strong>BangLab</strong> uses AWS to support research workloads, 
 with a focus on <strong>GPU compute (EC2)</strong> and <strong>object storage (S3)</strong>.</p>
 <p>This is <strong>not</strong> a general AWS tutorial.<br />
@@ -132,6 +139,7 @@ It is a <strong>lab-specific guide</strong> describing:</p>
 <li>what resources are available to you, and </li>
 <li>how to use AWS safely and efficiently in our research environment.</li>
 </ul>
+<p>This tutorial uses a practical toolbox for AWS workflows: <a href="https://github.com/xiransong/banglab-aws-tools"><code>banglab-aws-tools</code></a></p>
 <hr />
 <h2 id="who-this-guide-is-for">🎯 Who This Guide Is For</h2>
 <p>This documentation is intended for:</p>
@@ -158,8 +166,10 @@ It is a <strong>lab-specific guide</strong> describing:</p>
    Set up login, MFA, and the AWS CLI correctly.</p>
 </li>
 <li>
-<p><strong>EC2 Tutorials</strong><br />
-   Launch and manage EC2 instances.</p>
+<p><strong>EC2 Guidance</strong>
+   Learn the EC2 model, recommended AMIs and instance types, and then use
+   <a href="https://github.com/xiransong/banglab-aws-tools"><code>banglab-aws-tools</code></a> for
+   day-to-day instance and EBS workflows.</p>
 </li>
 <li>
 <p><strong>S3 Tutorials</strong><br />
@@ -214,5 +224,5 @@ It is a <strong>lab-specific guide</strong> describing:</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2026-01-31 21:42:04.698049+00:00
+Build Date UTC : 2026-05-13 19:20:24.938394+00:00
 -->

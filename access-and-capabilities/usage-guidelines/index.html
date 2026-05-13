@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Usage Guidelines - BangLab AWS EC2 Guide</title>
+    <title>Usage Guidelines - BangLab AWS Guide</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -30,8 +30,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> BangLab AWS EC2 Guide
-        </a><div role="search">
+          <a href="../.." class="icon icon-home"> BangLab AWS Guide
+        </a>
+        <div class="version">
+          v0.1.0
+        </div><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
@@ -60,13 +63,15 @@
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../resource-ownership/">Resource Ownership Rules</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../ec2-gpu-operator/">EC2-GPU-Operator</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Usage Guidelines</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#ec2-usage">EC2 Usage</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#tagging-optional-but-recommended">Tagging (Optional but recommended)</a>
+    <li class="toctree-l2"><a class="reference internal" href="#owner-tagging">Owner Tagging</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#gpu-quota-awareness">GPU &amp; Quota Awareness</a>
     </li>
@@ -92,7 +97,9 @@
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">CPU Instance Lifecycle</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/recommended-ami-and-instance/">Recommended AMI and Instance Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ec2/cpu-instance-lifecycle/">EC2 Workflow Toolbox</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../ec2/ebs-basics/">EBS Basics</a>
                   </li>
@@ -113,7 +120,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">BangLab AWS EC2 Guide</a>
+          <a href="../..">BangLab AWS Guide</a>
         
       </nav>
       <div class="wy-nav-content">
@@ -142,6 +149,11 @@
 <h2 id="ec2-usage">EC2 Usage</h2>
 <ul>
 <li>
+<p><strong>Tag every EC2 resource with your owner value</strong><br />
+  Instances, EBS volumes, security groups, and EC2 key pairs must use
+  <code>Owner=&lt;username&gt;</code>, for example <code>Owner=xiransong</code>.</p>
+</li>
+<li>
 <p><strong>Terminate instances when you are done</strong><br />
   Running instances consume budget and quota.</p>
 </li>
@@ -155,14 +167,23 @@
 </li>
 </ul>
 <hr />
-<h2 id="tagging-optional-but-recommended">Tagging (Optional but recommended)</h2>
-<p>Even though each lab member has a <strong>separate AWS account</strong>,
-tagging EC2 instances is still recommended.</p>
-<p>Tags help you:</p>
-<ul>
-<li>distinguish different projects or experiments,</li>
-<li>understand where costs come from within your account.</li>
-</ul>
+<h2 id="owner-tagging">Owner Tagging</h2>
+<p>Some AWS accounts are shared by multiple lab members. Owner tags are required
+so users can manage their own resources without affecting someone else's work.</p>
+<p>Use your full-name-style BangLab username consistently:</p>
+<pre><code class="language-text">Owner=xiransong
+Name=xiransong-gpu-dev
+</code></pre>
+<p>Recommended <code>Name</code> tag pattern:</p>
+<pre><code class="language-text">Name=&lt;username&gt;-&lt;purpose&gt;
+</code></pre>
+<p>Examples:</p>
+<pre><code class="language-text">Name=xiransong-cpu-test
+Name=xiransong-gpu-dev
+Name=xiransong-persistent-ebs
+Name=xiransong-ssh
+Name=xiransong-key
+</code></pre>
 <hr />
 <h2 id="gpu-quota-awareness">GPU &amp; Quota Awareness</h2>
 <ul>
@@ -171,10 +192,15 @@ tagging EC2 instances is still recommended.</p>
 <hr />
 <h2 id="s3-usage">S3 Usage</h2>
 <ul>
+<li>Name S3 buckets using the required <code>banglab-&lt;username&gt;-*</code> pattern</li>
 <li>Use S3 for <strong>datasets and experiment outputs</strong>, not scratch space</li>
 <li>Avoid high-frequency, small-file updates</li>
 <li>Clean up unused buckets and data when no longer needed</li>
 </ul>
+<p>Examples:</p>
+<pre><code class="language-text">banglab-xiransong-data
+banglab-xiransong-scratch
+</code></pre>
 <hr />
 <h2 id="cost-awareness">Cost Awareness</h2>
 <ul>
