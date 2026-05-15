@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+    "Sid": "S3CreateSharedDataBuckets",
+    "Effect": "Allow",
+    "Action": [
+        "s3:CreateBucket"
+    ],
+    "Resource": "arn:aws:s3:::banglab-shared-data-*"
+    },
+    {
+    "Sid": "S3ManageSharedDataBuckets",
+    "Effect": "Allow",
+    "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetBucketVersioning",
+        "s3:PutBucketVersioning",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutEncryptionConfiguration",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:PutBucketPublicAccessBlock"
+    ],
+    "Resource": "arn:aws:s3:::banglab-shared-data-*"
+    },
+    {
+    "Sid": "S3ManageSharedDataBucketObjects",
+    "Effect": "Allow",
+    "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:GetObjectTagging",
+        "s3:PutObjectTagging",
+        "s3:DeleteObjectTagging"
+    ],
+    "Resource": "arn:aws:s3:::banglab-shared-data-*/*"
+    }
+  ]
+}

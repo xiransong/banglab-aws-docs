@@ -396,6 +396,24 @@
       "Resource": [
         "arn:aws:s3:::banglab-${aws:PrincipalTag/Owner}-*/*"
       ]
+    },
+    {
+      "Sid": "S3ReadOnlySharedDataBuckets",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketLocation"
+      ],
+      "Resource": "arn:aws:s3:::banglab-shared-data-*"
+    },
+    {
+      "Sid": "S3ReadOnlySharedDataBucketObjects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectTagging"
+      ],
+      "Resource": "arn:aws:s3:::banglab-shared-data-*/*"
     }
   ]
 }
