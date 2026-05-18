@@ -1,6 +1,6 @@
 # BangLab AWS Docs
 
-Site: [https://github.com/xiransong/banglab-aws-tools](https://github.com/xiransong/banglab-aws-tools)
+Site: [https://xiransong.github.io/banglab-aws-docs/](https://xiransong.github.io/banglab-aws-docs/)
 
 This repository contains the documentation site for **BangLab AWS usage**,
 including account access, onboarding steps, resource ownership rules, EC2
